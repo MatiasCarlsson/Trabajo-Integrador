@@ -1,0 +1,28 @@
+# Dependencias
+node_modules/
+.npm/
+
+# Archivos de distribución
+dist/
+build/
+
+# Archivos de configuración
+.env
+.env.local
+.env.production
+
+# Archivos generados
+*.min.js
+*.min.css
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+.temp/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
