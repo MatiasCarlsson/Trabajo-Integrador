@@ -1,23 +1,10 @@
 ---
-import Header from "../components/Header.astro";
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
-  <Header />
-  <main class= "container mx-auto px-4 py-8">
-    <div class= "max-w-4xl mx-auto">
-      <h1 class= "text-4xl font-bold text-gray-900 mb-6" >Bienvenido a tu proyecto Astro</h1>
-      <p class="text-lg text-gray-600 mb-8">
-        Tu contenido principal va aquí. Este es un proyecto limpio y sin barras no deseadas.
-      </p>
-
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h2 class="text-2xl font-semibold text-blue-900 mb-3">¡Tailwind CSS está funcionando!</h2>
-        <p class="text-blue-700">
-          Puedes usar todas las clases de Tailwind para crear diseños hermosos y responsivos.
-        </p>
-      </div>
-    </div>
+<Layout title="Inicio - Bloom">
+  <main class="container mx-auto my-8 px-4">
+    <h1 class="mb-6 text-3xl font-bold">Bienvenido a nuestra tienda</h1>
+    <p class="text-lg">Este es un párrafo de ejemplo en la página de inicio.</p>
   </main>
 </Layout>

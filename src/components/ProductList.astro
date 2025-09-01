@@ -1,0 +1,30 @@
+---
+export interface Product {
+  nombre: string;
+  precio: number;
+  imagen: string;
+}
+const { listaProductos } = Astro.props;
+---
+
+<article class="container mx-auto my-8 h-full w-full px-4">
+  <ul class="grid grid-cols-4 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3">
+    {
+      listaProductos.map((producto: Product) => (
+        <li class="size flex flex-col items-center justify-center rounded-lg border border-gray-100 bg-white bg-opacity-20 shadow-lg backdrop-blur-sm backdrop-filter transition-transform duration-300 hover:scale-105 hover:border-bloom-accent hover:shadow-xl hover:shadow-bloom-accent">
+          <img
+            src={producto.imagen}
+            alt={producto.nombre}
+            class="size-32 object-cover"
+          />
+          <h3 class="text-lg font-semibold">{producto.nombre}</h3>
+          <p class="text-center text-gray-700">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati
+            quae laudantium veniam maxime? Odio, laudantium.
+          </p>
+          <p class="pt-2 text-sm font-bold">Precio: ${producto.precio}</p>
+        </li>
+      ))
+    }
+  </ul>
+</article>
