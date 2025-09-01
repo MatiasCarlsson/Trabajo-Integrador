@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bloom-bg': '#f0ece5', // fondo
+        'bloom-bg': '#f8f8d9', // fondo
         'bloom-primary': '#b1a08a', // color principal
         'bloom-accent': '#bfa4c0', // flor lavanda
         'bloom-deep': '#968d7d', // variante más oscura

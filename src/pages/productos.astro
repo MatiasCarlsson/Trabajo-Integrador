@@ -1,0 +1,9 @@
+---
+import productos from '../data/productos.json';
+import Layout from '../layouts/Layout.astro';
+import ProductList from '../components/ProductList.astro';
+---
+
+<Layout>
+  <ProductList listaProductos={productos} />
+</Layout>
