@@ -1,0 +1,46 @@
+---
+import productos from '@data/productos.json';
+
+// Seleccionamos solo 6 productos para mostrar en la cuadrícula
+const productosDestacados = productos.slice(0, 6);
+---
+
+<section class="container mx-auto my-12 px-4">
+  <h2 class="mb-6 text-center text-3xl font-bold text-bloom-primary">
+    Productos Destacados
+  </h2>
+
+  <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+    {
+      productosDestacados.map((producto) => (
+        <div class="hover:scale-102 flex h-full flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition-transform hover:shadow-lg">
+          <div class="flex h-64 items-center justify-center bg-gray-50 p-4">
+            <img
+              src={producto.imagen}
+              alt={producto.nombre}
+              class="max-h-full object-contain"
+            />
+          </div>
+
+          <div class="flex flex-grow flex-col p-4">
+            <h3 class="mb-2 text-xl font-semibold">{producto.nombre}</h3>
+            <p class="line-clamp-2 flex-grow text-sm text-gray-600">
+              {producto.descripcion?.substring(0, 100)}...
+            </p>
+            <div class="mt-4 flex items-center justify-between">
+              <span class="text-lg font-bold text-bloom-primary">
+                ${producto.precio?.toLocaleString('es-AR')}
+              </span>
+              <a
+                href={`/productos/${producto.nombre?.toLowerCase().replace(/ /g, '-')}`}
+                class="rounded bg-bloom-accent px-4 py-2 text-sm text-white transition hover:bg-bloom-deep"
+              >
+                Ver detalles
+              </a>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
