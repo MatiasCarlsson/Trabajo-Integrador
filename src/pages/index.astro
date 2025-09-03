@@ -1,10 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '@layouts/Layout.astro';
+import CarrucelProximamente from '@components/CarrucelProximamente.astro';
+import ProductosDestacados from '@components/ProductosDestacados.astro';
+import Combos from '@components/Combos.astro';
 ---
 
 <Layout title="Inicio - Bloom">
-  <main class="container mx-auto my-8 px-4">
-    <h1 class="mb-6 text-3xl font-bold">Bienvenido a nuestra tienda</h1>
-    <p class="text-lg">Este es un párrafo de ejemplo en la página de inicio.</p>
-  </main>
+  <CarrucelProximamente />
+  <ProductosDestacados />
+  <Combos />
 </Layout>

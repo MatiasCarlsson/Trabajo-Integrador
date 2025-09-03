@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths } from 'astro';
+import productos from '@data/productos.json';
+import Layout from '@layouts/Layout.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return productos.map((producto) => ({
+    params: { producto: producto.nombre.toLowerCase().replace(/ /g, '-') },
+    props: { producto },
+  }));
+};
+
+type producto = {
+  nombre: string;
+  precio: number;
+  imagen: string;
+  descripcion: string;
+};
+
+export interface Props {
+  producto: producto;
+}
+
+const { producto } = Astro.props;
+const precioFormato = new Intl.NumberFormat('es-ES', {
+  style: 'currency',
+  currency: 'ARS',
+}).format(producto.precio);
+---
+
+<Layout title={`Detalles de ${producto.nombre}`}>
+  <article
+    class="container mx-auto my-8 grid grid-cols-1 gap-8 px-4 md:grid-cols-2"
+  >
+    <div>
+      <img
+        src={producto.imagen}
+        alt={producto.nombre}
+        class="w-full rounded-lg object-cover"
+      />
+    </div>
+    <div>
+      <h1 class="mb-4 text-3xl font-bold">{producto.nombre}</h1>
+      <p class="mb-4">{producto.descripcion}</p>
+      <p class="mb-6 text-2xl font-bold">Precio: {precioFormato}</p>
+      <button
+        class="rounded-lg bg-purple-600 px-6 py-2 text-white hover:bg-purple-700"
+      >
+        Añadir al carrito
+      </button>
+      <a href="/productos/productos" class="ml-4 text-purple-600 underline">
+        Volver a la tienda
+      </a>
+    </div>
+  </article>
+</Layout>
