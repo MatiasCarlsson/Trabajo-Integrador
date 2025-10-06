@@ -13,31 +13,38 @@ interface Product {
 <Layout>
   <main class="container mx-auto my-8 px-4">
     <h1 class="mb-6 text-3xl font-bold">Listado de Productos</h1>
-    <table class="w-full border-collapse text-left">
-      <thead>
-        <tr class="bg-gray-200">
-          <th class="border p-2">Nombre</th>
-          <th class="border p-2">Precio</th>
-          <th class="border p-2">Imagen</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          (productos as Product[]).map((producto) => (
-            <tr class="border-b">
-              <td class="border p-2">{producto.nombre}</td>
-              <td class="border p-2 text-center">{producto.precio}</td>
-              <td class="justify-items-center border p-2">
-                <img
-                  src={producto.imagen}
-                  alt={producto.nombre}
-                  class="h-16 w-16 object-contain"
-                />
-              </td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-left">
+        <thead>
+          <tr class="bg-gray-200">
+            <th scope="col" class="border p-2">Nombre</th>
+            <th scope="col" class="border p-2">Precio</th>
+            <th scope="col" class="border p-2">Imagen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            (productos as Product[]).map((producto) => (
+              <tr class="border-b odd:bg-white even:bg-gray-50 hover:bg-gray-100">
+                <td class="border p-2">{producto.nombre}</td>
+                <td class="border p-2 text-center">
+                  {producto.precio.toLocaleString('es-AR', {
+                    style: 'currency',
+                    currency: 'ARS',
+                  })}
+                </td>
+                <td class="justify-items-center border p-2">
+                  <img
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    class="h-16 w-16 object-contain"
+                  />
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
   </main>
 </Layout>

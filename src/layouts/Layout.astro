@@ -1,7 +1,7 @@
 ---
 import Header from '@components/Header.astro';
 import '@styles/layout.css';
-
+import bloom_logo from '@public/bloom_logo.ico';
 interface Props {
   title?: string;
 }
@@ -14,8 +14,7 @@ const { title = 'Bloom Distribuciones' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
+    <link rel="icon" type="image/x-icon" />
     <title>{title}</title>
   </head>
   <body id="body">

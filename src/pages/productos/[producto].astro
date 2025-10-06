@@ -5,20 +5,26 @@ import Layout from '@layouts/Layout.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return productos.map((producto) => ({
-    params: { producto: producto.nombre.toLowerCase().replace(/ /g, '-') },
+    params: {
+      producto: producto.nombre
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-'),
+    },
     props: { producto },
   }));
 };
 
-type producto = {
+interface Producto {
   nombre: string;
   precio: number;
   imagen: string;
   descripcion: string;
-};
+}
 
 export interface Props {
-  producto: producto;
+  producto: Producto;
 }
 
 const { producto } = Astro.props;
@@ -30,27 +36,35 @@ const precioFormato = new Intl.NumberFormat('es-ES', {
 
 <Layout title={`Detalles de ${producto.nombre}`}>
   <article
-    class="container mx-auto my-8 grid grid-cols-1 gap-8 px-4 md:grid-cols-2"
+    class="container mx-auto my-8 grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:gap-8"
   >
-    <div>
+    <div class="order-2 md:order-1">
       <img
         src={producto.imagen}
         alt={producto.nombre}
-        class="w-full rounded-lg object-cover"
+        class="w-full rounded-lg object-contain md:object-cover"
       />
     </div>
-    <div>
-      <h1 class="mb-4 text-3xl font-bold">{producto.nombre}</h1>
-      <p class="mb-4">{producto.descripcion}</p>
-      <p class="mb-6 text-2xl font-bold">Precio: {precioFormato}</p>
-      <button
-        class="rounded-lg bg-purple-600 px-6 py-2 text-white hover:bg-purple-700"
-      >
-        Añadir al carrito
-      </button>
-      <a href="/productos/productos" class="ml-4 text-purple-600 underline">
-        Volver a la tienda
-      </a>
+    <div class="order-1 md:order-2">
+      <h1 class="mb-4 text-2xl font-bold md:text-3xl">{producto.nombre}</h1>
+      <p class="mb-4 text-sm text-gray-700 md:text-base">
+        {producto.descripcion}
+      </p>
+      <p class="mb-6 text-xl font-bold md:text-2xl">Precio: {precioFormato}</p>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <button
+          type="button"
+          class="rounded-lg bg-purple-600 px-4 py-2 text-sm text-white hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 md:px-6 md:text-base"
+        >
+          Añadir al carrito
+        </button>
+        <a
+          href="/productos"
+          class="text-center text-sm text-purple-600 underline md:text-base"
+        >
+          Volver a la tienda
+        </a>
+      </div>
     </div>
   </article>
 </Layout>

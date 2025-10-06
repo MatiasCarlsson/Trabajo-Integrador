@@ -4,29 +4,33 @@ import productos from '@data/productos.json';
 const productosDestacados = productos.slice(0, 3);
 ---
 
-<section class="container mx-auto my-8">
+<section class="container mx-auto my-8 px-4">
   <div
-    class="grid h-[400px] grid-cols-1 gap-6 rounded-lg bg-white p-6 shadow-md md:grid-cols-2"
+    class="grid min-h-[300px] grid-cols-1 gap-6 rounded-lg bg-white p-4 shadow-md md:h-[400px] md:grid-cols-2 md:p-6"
   >
     <!-- Columna izquierda: Productos Populares + Carrucel -->
-    <div class="space-y-6">
-      <h2 class="text-2xl font-bold text-bloom-primary">Productos Populares</h2>
+    <div class="space-y-4 md:space-y-6">
+      <h2 class="text-xl font-bold text-bloom-primary md:text-2xl">
+        Productos Populares
+      </h2>
 
       <div
-        class="carousel-container relative h-[280px] overflow-hidden rounded-lg border border-gray-200"
+        class="carousel-container relative h-[200px] overflow-hidden rounded-lg border border-gray-200 md:h-[280px]"
       >
         <!-- Carrusel simple estático por ahora -->
-        <div class="flex gap-4 p-4">
+        <div class="flex gap-2 p-2 md:gap-4 md:p-4">
           {
             productosDestacados.map((producto) => (
               <div class="w-full flex-shrink-0">
                 <img
                   src={producto.imagen}
                   alt={producto.nombre || 'Imagen de producto Seytú'}
-                  class="mx-auto h-32 object-contain"
+                  class="mx-auto h-20 object-contain md:h-32"
                 />
-                <p class="mt-2 text-center font-medium">{producto.nombre}</p>
-                <p class="text-center font-bold text-bloom-accent">
+                <p class="mt-1 text-center text-xs font-medium md:mt-2 md:text-sm">
+                  {producto.nombre}
+                </p>
+                <p class="text-center text-xs font-bold text-bloom-accent md:text-sm">
                   ${producto.precio.toLocaleString('es-AR')}
                 </p>
               </div>
@@ -35,30 +39,33 @@ const productosDestacados = productos.slice(0, 3);
         </div>
 
         <!-- Indicadores de puntos (estáticos) -->
-        <div class="mt-4 flex justify-center gap-2">
-          <span class="h-3 w-3 rounded-full bg-bloom-primary"></span>
-          <span class="h-3 w-3 rounded-full bg-gray-300"></span>
-          <span class="h-3 w-3 rounded-full bg-gray-300"></span>
+        <div class="mt-2 flex justify-center gap-1 md:mt-4 md:gap-2">
+          <span class="h-2 w-2 rounded-full bg-bloom-primary md:h-3 md:w-3"
+          ></span>
+          <span class="h-2 w-2 rounded-full bg-gray-300 md:h-3 md:w-3"></span>
+          <span class="h-2 w-2 rounded-full bg-gray-300 md:h-3 md:w-3"></span>
         </div>
       </div>
     </div>
 
     <!-- Columna derecha: Descripción -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold text-bloom-primary">Descubre Seytú</h2>
-      <p class="text-gray-700">
+    <div class="space-y-3 md:space-y-4">
+      <h2 class="text-xl font-bold text-bloom-primary md:text-2xl">
+        Descubre Seytú
+      </h2>
+      <p class="text-sm text-gray-700 md:text-base">
         Seytú ofrece una amplia gama de productos de belleza y cuidado personal
         elaborados con ingredientes naturales de la más alta calidad. Nuestros
         productos están diseñados para realzar tu belleza natural y proporcionar
         resultados excepcionales.
       </p>
-      <p class="text-gray-700">
+      <p class="hidden text-gray-700 md:block">
         Desde cosméticos hasta productos para el cuidado de la piel, Seytú tiene
         todo lo que necesitas para lucir y sentirte espectacular todos los días.
       </p>
       <a
-        href="/productos/productos"
-        class="inline-block rounded-md bg-bloom-accent px-6 py-2 text-white transition hover:bg-bloom-deep"
+        href="/productosBox"
+        class="inline-block rounded-md bg-bloom-accent px-4 py-2 text-sm text-white transition hover:bg-bloom-deep md:px-6 md:text-base"
       >
         Ver catálogo completo
       </a>

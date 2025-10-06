@@ -3,19 +3,21 @@ import Layout from '@layouts/Layout.astro';
 ---
 
 <Layout title="Contacto - Bloom">
-  <div class="flex min-h-screen w-full justify-center">
-    <main class="my-8 w-2/6 px-4">
-      <h1 class="mb-6 text-center text-3xl font-bold text-gray-800">
+  <div class="flex min-h-screen w-full justify-center px-4">
+    <main class="my-8 w-full max-w-md">
+      <h1 class="mb-6 text-center text-2xl font-bold text-gray-800 md:text-3xl">
         Contacto
       </h1>
-      <p class="mb-6 text-center text-lg text-gray-700">
+      <p class="mb-6 text-center text-base text-gray-800 md:text-lg">
         Ponte en contacto con nosotros.
       </p>
       <form
-        class="rounded-2xl border border-white/30 bg-white/20 p-8 shadow-lg backdrop-blur-xl backdrop-saturate-150"
+        method="POST"
+        action="/api/contacto"
+        class="rounded-2xl border border-white/30 bg-white/20 p-6 shadow-lg backdrop-blur-xl backdrop-saturate-150 md:p-8"
       >
         <div class="mb-6">
-          <label for="nombre" class="mb-2 block font-medium text-gray-700"
+          <label for="nombre" class="mb-2 block font-medium text-gray-800"
             >Nombre</label
           >
           <input
@@ -28,7 +30,7 @@ import Layout from '@layouts/Layout.astro';
           />
         </div>
         <div class="mb-6">
-          <label for="phone" class="mb-2 block font-medium text-gray-700"
+          <label for="phone" class="mb-2 block font-medium text-gray-800"
             >Teléfono</label
           >
           <input
@@ -36,24 +38,26 @@ import Layout from '@layouts/Layout.astro';
             id="phone"
             name="phone"
             placeholder="Número de teléfono"
+            pattern="[0-9]{10,15}"
             class="w-full rounded-lg border border-white/40 bg-white/30 p-3 placeholder-gray-500 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
         <div class="mb-6">
-          <label for="mensaje" class="mb-2 block font-medium text-gray-700"
+          <label for="mensaje" class="mb-2 block font-medium text-gray-800"
             >Mensaje</label
           >
           <textarea
             id="mensaje"
             rows="4"
+            name="mensaje"
             class="w-full rounded-lg border border-white/40 bg-white/30 p-3 placeholder-gray-500 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             required></textarea>
         </div>
         <div class="flex justify-center">
           <button
             type="submit"
-            class="rounded-lg bg-gradient-to-r from-blue-400 to-purple-500 px-8 py-3 text-white shadow-md backdrop-blur-sm transition-all hover:translate-y-[-2px] hover:shadow-lg"
+            class="rounded-lg bg-gradient-to-r from-blue-400 to-purple-500 px-6 py-2.5 text-sm text-white shadow-md backdrop-blur-sm transition-all hover:translate-y-[-2px] hover:shadow-lg md:px-8 md:py-3 md:text-base"
           >
             Enviar
           </button>
