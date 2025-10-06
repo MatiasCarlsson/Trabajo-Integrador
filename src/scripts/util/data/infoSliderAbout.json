@@ -1,0 +1,16 @@
+[
+  {
+    "index": 0,
+    "nombre": "Hannah",
+    "imagen": "/img/hannita.png",
+    "descripcion": "Hannita es una talentosa artista y diseñadora gráfica con una pasión por crear ilustraciones vibrantes y llenas de vida. Su estilo único combina elementos de fantasía y naturaleza, dando lugar a obras que capturan la imaginación y transmiten emociones profundas. Con una habilidad excepcional para el color y la composición, Hannita ha trabajado en diversos proyectos, desde portadas de libros hasta campañas publicitarias, siempre dejando su sello distintivo en cada pieza que crea.",
+    "alt": "Hannita"
+  },
+  {
+    "index": 1,
+    "nombre": "Maty",
+    "imagen": "/img/hannita2.png",
+    "descripcion": "Maty es un desarrollador web apasionado por la creación de experiencias digitales innovadoras y atractivas. Con una sólida formación en programación y diseño, Maty se especializa en el desarrollo de sitios web responsivos y aplicaciones interactivas que combinan funcionalidad y estética. Su enfoque centrado en el usuario y su atención al detalle le permiten transformar ideas complejas en soluciones intuitivas y accesibles. Siempre en busca de nuevas tecnologías y tendencias.",
+    "alt": "Maty"
+  }
+]

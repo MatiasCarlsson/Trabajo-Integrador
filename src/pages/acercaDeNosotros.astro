@@ -1,10 +1,15 @@
 ---
+import SliderAbout from '@components/SliderAbout.astro';
 import Layout from '@layouts/Layout.astro';
+
+import jsonData from '@scripts/util/data/infoSliderAbout.json';
+
+const imagenes = jsonData.map((item) => item.imagen);
+const descripcion = jsonData.map((item) => item.descripcion);
 ---
 
 <Layout title="Acerca de nosotros - Bloom">
-  <main class="container mx-auto my-8 px-4">
-    <h1 class="mb-6 text-3xl font-bold">Acerca de nosotros</h1>
-    <p class="text-lg">Información sobre nuestra empresa.</p>
+  <main class="container mx-auto my-8 h-screen px-4">
+    <SliderAbout imagenes={imagenes} descripcion={descripcion} client:load />
   </main>
 </Layout>

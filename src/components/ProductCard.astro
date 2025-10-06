@@ -28,7 +28,11 @@ const productosMostrar = limite ? productos.slice(0, limite) : productos;
           <li>
             <a
               class="flex h-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-100 bg-white bg-opacity-20 p-4 shadow-lg backdrop-blur-sm backdrop-filter transition-transform duration-300 hover:scale-105 hover:border-bloom-accent hover:shadow-xl hover:shadow-bloom-accent"
-              href={`/productos/${producto.nombre.toLowerCase().replace(/ /g, '-')}`}
+              href={`/productos/${producto.nombre
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')}`}
             >
               <img
                 src={producto.imagen}
