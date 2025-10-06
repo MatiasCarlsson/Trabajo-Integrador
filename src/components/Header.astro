@@ -7,7 +7,7 @@ import CarritoCompra from './icons/CarritoCompra.astro';
   class="[background: linear-gradient( 360deg, rgba(240, 236, 229, 1) 0%, rgb(191, 164, 192, 1) 100% );] sticky top-0 z-50 w-full shadow-sm"
 >
   <!-- Header principal -->
-  <div class="flex items-center justify-between gap-2 p-4 md:gap-4">
+  <div class="flex items-center gap-2 p-4 pr-6 md:gap-4">
     <!-- Logo -->
     <div class="flex flex-shrink-0 items-center">
       <a href="/" class="flex items-center">
@@ -16,100 +16,97 @@ import CarritoCompra from './icons/CarritoCompra.astro';
           alt="Logo Bloom"
           width="48"
           height="48"
-          class="h-8 w-8 rounded-full bg-bloom-primary p-1 sm:h-10 sm:w-10 md:h-12 md:w-12"
+          class="h-8 w-8 rounded-full border-2 border-bloom-deep sm:h-10 sm:w-10 md:h-12 md:w-12"
         />
       </a>
     </div>
 
-    <!-- Barra de búsqueda - Siempre visible -->
-    <form class="max-w-xs flex-1 sm:max-w-sm md:max-w-md lg:max-w-lg">
+    <!-- Barra de búsqueda - Ocupa todo el espacio disponible -->
+    <form class="mx-3 flex-1">
       <label for="search" class="sr-only">Buscar productos</label>
       <input
         type="text"
         id="search"
         placeholder="Buscar..."
-        class="w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-bloom-accent focus:outline-none focus:ring-1 focus:ring-bloom-accent sm:px-3 sm:py-2 sm:text-sm md:text-base"
+        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-bloom-accent focus:outline-none focus:ring-1 focus:ring-bloom-accent md:text-base"
       />
     </form>
 
-    <!-- Botones de la derecha -->
-    <div class="flex flex-shrink-0 items-center gap-1 sm:gap-2">
-      <!-- Carrito -->
-      <a
-        href="/carrito"
-        class="flex size-8 items-center justify-center rounded-full transition-colors hover:bg-white/20 sm:size-10"
-        aria-label="Ver carrito"
-      >
-        <CarritoCompra />
-      </a>
-
-      <!-- Botón menú hamburguesa - Solo móvil -->
-      <button
-        id="menu-toggle"
-        class="flex size-8 items-center justify-center rounded-md transition-colors hover:bg-white/20 sm:size-10 md:hidden"
-        aria-label="Abrir menú"
-      >
-        <svg
-          class="h-5 w-5 sm:h-6 sm:w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Navegación - Desktop -->
-  <nav class="hidden border-t border-white/20 md:block">
-    <div class="flex items-center justify-center gap-8 px-4 py-3">
+    <!-- Navegación - Desktop (adaptativa) -->
+    <nav
+      class="hidden sm:flex sm:items-center sm:gap-2 md:gap-3 lg:gap-4 xl:gap-6"
+    >
       <a
         href="/"
-        class="text-sm font-medium transition-colors hover:text-bloom-primary lg:text-base"
+        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
       >
         Inicio
       </a>
       <a
         href="/productosBox"
-        class="text-sm font-medium transition-colors hover:text-bloom-primary lg:text-base"
+        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
       >
         Productos
       </a>
       <a
         href="/acercaDeNosotros"
-        class="text-sm font-medium transition-colors hover:text-bloom-primary lg:text-base"
+        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
       >
-        Acerca de Nosotros
+        Acerca
       </a>
       <a
         href="/listadoTabla"
-        class="text-sm font-medium transition-colors hover:text-bloom-primary lg:text-base"
+        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
       >
-        Lista en Tabla
+        Tabla
       </a>
       <a
         href="/contacto"
-        class="text-sm font-medium transition-colors hover:text-bloom-primary lg:text-base"
+        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
       >
         Contacto
       </a>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Menú móvil -->
+    <!-- Botón menú hamburguesa - Solo móviles -->
+    <button
+      id="menu-toggle"
+      class="ml-2 flex size-8 items-center justify-center rounded-md transition-colors hover:bg-white/20 sm:hidden"
+      aria-label="Abrir menú"
+    >
+      <svg
+        class="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Carrito - Siempre a la derecha -->
+    <a
+      href="/carrito"
+      class="ml-2 flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-white/20 sm:size-10"
+      aria-label="Ver carrito"
+    >
+      <CarritoCompra />
+    </a>
+  </div>
+
+  <!-- Menú móvil - Solo para móviles pequeños -->
   <nav
     id="mobile-menu"
-    class="hidden border-t border-white/20 bg-white/10 backdrop-blur-sm md:hidden"
+    class="hidden border-t border-white/20 bg-white/10 backdrop-blur-sm sm:hidden"
   >
     <div class="flex flex-col py-2">
       <a
         href="/"
-        class="block px-4 py-3 text-sm font-medium transition-colors hover:bg-white/20"
+        class="block px-4 py-3 text-sm font-medium transition-colors hover:bg-black/20"
       >
         Inicio
       </a>
