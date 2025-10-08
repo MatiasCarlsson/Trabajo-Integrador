@@ -1,0 +1,70 @@
+---
+const { id, nombre, precio } = Astro.props;
+
+interface ProductoCarrito {
+  id: string;
+  nombre: string;
+  precio: number;
+  cantidad: number;
+}
+---
+
+<button
+  id="add-to-cart"
+  data-id={id}
+  data-nombre={nombre}
+  data-precio={precio}
+  class="rounded-lg bg-pink-500 px-6 py-2 text-white hover:bg-purple-700"
+>
+  Añadir al carrito
+</button>
+<script>
+  declare global {
+    interface Window {
+      agregarAlCarrito: (producto: any) => void;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.querySelector(
+      'button[data-id]'
+    ) as HTMLButtonElement;
+
+    if (!button) {
+      console.error('No se encontró el botón del carrito');
+      return;
+    }
+
+    button.addEventListener('click', () => {
+      const producto = {
+        id: button.dataset.id!,
+        nombre: button.dataset.nombre!,
+        precio: Number(button.dataset.precio!),
+        imagen: button.dataset.imagen!,
+      };
+
+      const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+      const existente = carrito.find((item: any) => item.id === producto.id);
+
+      if (existente) {
+        existente.cantidad = (existente.cantidad || 1) + 1;
+        console.log(
+          `✅ ${existente.nombre}: ahora tienes ${existente.cantidad} unidades`
+        );
+      } else {
+        carrito.push({ ...producto, cantidad: 1 });
+        console.log(`🆕 ${producto.nombre}: agregado con 1 unidad`);
+      }
+
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+
+      // Mostrar resumen completo del carrito
+      console.log('📋 RESUMEN DEL CARRITO:');
+      const carritoActual = JSON.parse(localStorage.getItem('carrito') || '[]');
+      carritoActual.forEach((item: any) => {
+        console.log(`   • ${item.nombre}: ${item.cantidad} unidades`);
+      });
+
+      alert(`${producto.nombre} ha sido añadido al carrito`);
+    });
+  });
+</script>
