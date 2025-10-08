@@ -7,4 +7,6 @@ export default defineConfig({
   integrations: [tailwind()],
   devToolbar: { enabled: false },
   site: 'https://MatiasCarlsson.github.io',
+  base: '/trabajo-integrador',
+  output: 'static',
 });
