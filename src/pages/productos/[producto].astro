@@ -62,6 +62,15 @@ function createURL(path: string) {
         <button
           type="button"
           class="rounded-lg bg-purple-600 px-4 py-2 text-sm text-white hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 md:px-6 md:text-base"
+          id="add-to-cart"
+          data-id={producto.nombre
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')}
+          data-nombre={producto.nombre}
+          data-precio={producto.precio}
+          data-imagen={producto.imagen}
         >
           Añadir al carrito
         </button>
@@ -75,3 +84,39 @@ function createURL(path: string) {
     </div>
   </article>
 </Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('add-to-cart') as HTMLButtonElement;
+
+    if (!button) {
+      console.error('No se encontró el botón del carrito');
+      return;
+    }
+
+    button.addEventListener('click', () => {
+      const producto = {
+        id: button.dataset.id!,
+        nombre: button.dataset.nombre!,
+        precio: Number(button.dataset.precio!),
+        imagen: button.dataset.imagen!,
+      };
+
+      const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+      const existente = carrito.find((item: any) => item.id === producto.id);
+
+      if (existente) {
+        existente.cantidad = (existente.cantidad || 1) + 1;
+        console.log(
+          `✅ ${existente.nombre}: ahora tienes ${existente.cantidad} unidades`
+        );
+      } else {
+        carrito.push({ ...producto, cantidad: 1 });
+        console.log(`🆕 ${producto.nombre}: agregado con 1 unidad`);
+      }
+
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      alert(`${producto.nombre} ha sido añadido al carrito`);
+    });
+  });
+</script>
