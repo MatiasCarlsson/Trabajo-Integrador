@@ -2,6 +2,10 @@
 import productos from '@data/productos.json';
 
 const productosDestacados = productos.slice(0, 3);
+
+// Helper para crear URLs con base path
+const baseURL = import.meta.env.BASE_URL || '/';
+const createURL = (path: string) => `${baseURL}${path.startsWith('/') ? path.slice(1) : path}`;
 ---
 
 <section class="container mx-auto my-8 px-4">
@@ -64,7 +68,7 @@ const productosDestacados = productos.slice(0, 3);
         todo lo que necesitas para lucir y sentirte espectacular todos los días.
       </p>
       <a
-        href="/Trabajo-Integrador/productos"
+        href={createURL('/productos')}
         class="inline-block rounded-md bg-bloom-accent px-4 py-2 text-sm text-white transition hover:bg-bloom-deep md:px-6 md:text-base"
       >
         Ver catálogo completo

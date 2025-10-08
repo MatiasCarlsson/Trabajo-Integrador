@@ -2,6 +2,10 @@
 import bloomLogo from '/public/img/bloom_logo.jpg';
 import CarritoCompra from './icons/CarritoCompra.astro';
 import '@styles/menuToggle.css';
+
+// Helper para crear URLs con base path
+const baseURL = import.meta.env.BASE_URL || '/';
+const createURL = (path: string) => `${baseURL}${path.startsWith('/') ? path.slice(1) : path}`;
 ---
 
 <header
@@ -11,7 +15,7 @@ import '@styles/menuToggle.css';
   <div class="flex items-center justify-between p-4">
     <!-- Logo -->
     <div class="flex flex-shrink-0 items-center">
-      <a href="/" class="flex items-center">
+      <a href={createURL('/')} class="flex items-center">
         <img
           src={bloomLogo.src}
           alt="Logo Bloom"
@@ -38,19 +42,19 @@ import '@styles/menuToggle.css';
       class="hidden justify-center p-1 sm:flex sm:items-center sm:gap-4 md:gap-8"
     >
       <a
-        href="/"
+        href={createURL('/')}
         class="whitespace-nowrap text-sm font-medium transition-colors hover:rounded-lg hover:bg-bloom-accent hover:shadow-md sm:text-sm lg:text-lg"
       >
         Inicio
       </a>
       <a
-        href="/productos"
+        href={createURL('/productos')}
         class="whitespace-nowrap text-sm font-medium transition-colors hover:rounded-lg hover:bg-bloom-accent hover:shadow-md sm:text-sm lg:text-lg"
       >
         Productos
       </a>
       <a
-        href="/acercaDeNosotros"
+        href={createURL('/acercaDeNosotros')}
         class="whitespace-nowrap text-sm font-medium transition-colors hover:rounded-lg hover:bg-bloom-accent hover:shadow-md sm:text-sm lg:text-lg"
       >
         Acerca de nosotros
@@ -77,7 +81,7 @@ import '@styles/menuToggle.css';
 
       <!-- Carrito -->
       <a
-        href="/carrito"
+        href={createURL('/carrito')}
         class="flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-white/20 sm:size-10"
         aria-label="Ver carrito"
       >
@@ -93,25 +97,25 @@ import '@styles/menuToggle.css';
   >
     <div class="px-4 py-2">
       <a
-        href="/Trabajo-Integrador"
+        href={createURL('/')}
         class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
         Inicio
       </a>
       <a
-        href="/Trabajo-Integrador/productos"
+        href={createURL('/productos')}
         class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
         Productos
       </a>
       <a
-        href="/Trabajo-Integrador/acercaDeNosotros"
+        href={createURL('/acercaDeNosotros')}
         class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
         Acerca de nosotros
       </a>
       <a
-        href="/Trabajo-Integrador/carrito"
+        href={createURL('/carrito')}
         class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
         Carrito

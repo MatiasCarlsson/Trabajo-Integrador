@@ -3,6 +3,10 @@ import productos from '@data/productos.json';
 
 // Seleccionamos solo 6 productos para mostrar en la cuadrícula
 const productosDestacados = productos.slice(0, 6);
+
+// Helper para crear URLs con base path
+const baseURL = import.meta.env.BASE_URL || '/';
+const createURL = (path: string) => `${baseURL}${path.startsWith('/') ? path.slice(1) : path}`;
 ---
 
 <section class="container mx-auto my-8 px-4 md:my-12">
@@ -71,7 +75,7 @@ const productosDestacados = productos.slice(0, 6);
           Los mejores productos para tu rutina facial diaria
         </p>
         <a
-          href="/Trabajo-Integrador/productos/combo-belleza-natural"
+          href={createURL('/productos/combo-belleza-natural')}
           class="mt-3 inline-block text-sm text-bloom-accent hover:underline md:text-base"
         >
           Ver combo
@@ -88,7 +92,7 @@ const productosDestacados = productos.slice(0, 6);
           Complementos para mejorar tu salud y vitalidad
         </p>
         <a
-          href="/Trabajo-Integrador/productos/combo-bienestar-total"
+          href={createURL('/productos/combo-bienestar-total')}
           class="mt-3 inline-block text-sm text-bloom-accent hover:underline md:text-base"
         >
           Ver combo
@@ -105,7 +109,7 @@ const productosDestacados = productos.slice(0, 6);
           La mejor selección de productos premium
         </p>
         <a
-          href="/Trabajo-Integrador/productos/combo-cuidado-premium"
+          href={createURL('/productos/combo-cuidado-premium')}
           class="mt-3 inline-block text-sm text-bloom-accent hover:underline md:text-base"
         >
           Ver combo
