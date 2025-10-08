@@ -4,8 +4,11 @@ import productos from '@data/productos.json';
 const productosDestacados = productos.slice(0, 3);
 
 // Helper para crear URLs con base path
-const baseURL = import.meta.env.BASE_URL || '/';
-const createURL = (path: string) => `${baseURL}${path.startsWith('/') ? path.slice(1) : path}`;
+function createURL(path: string) {
+  const base = import.meta.env.BASE_URL || '/';
+  const cleanPath = path.replace(/^\//, '');
+  return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
+}
 ---
 
 <section class="container mx-auto my-8 px-4">

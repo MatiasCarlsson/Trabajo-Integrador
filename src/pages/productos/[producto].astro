@@ -34,8 +34,11 @@ const precioFormato = new Intl.NumberFormat('es-ES', {
 }).format(producto.precio);
 
 // Helper para crear URLs con base path
-const baseURL = import.meta.env.BASE_URL || '/';
-const createURL = (path: string) => `${baseURL}${path.startsWith('/') ? path.slice(1) : path}`;
+function createURL(path: string) {
+  const base = import.meta.env.BASE_URL || '/';
+  const cleanPath = path.replace(/^\//, '');
+  return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
+}
 ---
 
 <Layout title={`Detalles de ${producto.nombre}`}>
