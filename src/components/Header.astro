@@ -1,13 +1,14 @@
 ---
 import bloomLogo from '/public/img/bloom_logo.jpg';
 import CarritoCompra from './icons/CarritoCompra.astro';
+import '@styles/menuToggle.css';
 ---
 
 <header
-  class="[background: linear-gradient( 360deg, rgba(240, 236, 229, 1) 0%, rgb(191, 164, 192, 1) 100% );] sticky top-0 z-50 w-full shadow-sm"
+  class="[background: linear-gradient( 360deg, rgba(240, 236, 229, 1) 0%, rgb(191, 164, 192, 1) 100% );] sticky top-0 z-10 w-full shadow-md backdrop-blur-lg"
 >
-  <!-- Header principal -->
-  <div class="flex items-center gap-2 p-4 pr-6 md:gap-4">
+  <!-- Contenedor principal del header -->
+  <div class="flex items-center justify-between p-4">
     <!-- Logo -->
     <div class="flex flex-shrink-0 items-center">
       <a href="/" class="flex items-center">
@@ -16,159 +17,107 @@ import CarritoCompra from './icons/CarritoCompra.astro';
           alt="Logo Bloom"
           width="48"
           height="48"
-          class="h-8 w-8 rounded-full border-2 border-bloom-deep sm:h-10 sm:w-10 md:h-12 md:w-12"
+          class="size-10 rounded-full border-2 border-bloom-deep"
         />
       </a>
     </div>
 
-    <!-- Barra de búsqueda - Ocupa todo el espacio disponible -->
-    <form class="mx-3 flex-1">
+    <!-- Buscador -->
+    <form class="mx-5 flex flex-1 items-center">
       <label for="search" class="sr-only">Buscar productos</label>
       <input
         type="text"
         id="search"
-        placeholder="Buscar..."
-        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-bloom-accent focus:outline-none focus:ring-1 focus:ring-bloom-accent md:text-base"
+        placeholder="Buscar productos..."
+        class="text-md w-full rounded-md border border-gray-400 px-3 py-2 focus:border-bloom-deep focus:outline-none focus:ring-1 focus:ring-bloom-accent md:text-base"
       />
     </form>
 
-    <!-- Navegación - Desktop (adaptativa) -->
+    <!-- Navegación desktop -->
     <nav
-      class="hidden sm:flex sm:items-center sm:gap-2 md:gap-3 lg:gap-4 xl:gap-6"
+      class="hidden justify-center p-1 sm:flex sm:items-center sm:gap-4 md:gap-8"
     >
       <a
         href="/"
-        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
+        class="whitespace-nowrap text-sm font-medium transition-colors hover:rounded-lg hover:bg-bloom-accent hover:shadow-md sm:text-sm lg:text-lg"
       >
         Inicio
       </a>
       <a
-        href="/productosBox"
-        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
+        href="/productos"
+        class="whitespace-nowrap text-sm font-medium transition-colors hover:rounded-lg hover:bg-bloom-accent hover:shadow-md sm:text-sm lg:text-lg"
       >
         Productos
       </a>
       <a
         href="/acercaDeNosotros"
-        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
+        class="whitespace-nowrap text-sm font-medium transition-colors hover:rounded-lg hover:bg-bloom-accent hover:shadow-md sm:text-sm lg:text-lg"
       >
-        Acerca
-      </a>
-      <a
-        href="/contacto"
-        class="whitespace-nowrap text-xs font-medium transition-colors hover:text-bloom-primary sm:text-sm lg:text-base"
-      >
-        Contacto
+        Acerca de nosotros
       </a>
     </nav>
 
-    <!-- Botón menú hamburguesa - Solo móviles -->
-    <button
-      id="menu-toggle"
-      class="ml-2 flex size-8 items-center justify-center rounded-md transition-colors hover:bg-white/20 sm:hidden"
-      aria-label="Abrir menú"
-    >
-      <svg
-        class="h-5 w-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <!-- Contenedor de botones (menú + carrito) -->
+    <div class="flex items-center gap-2">
+      <!-- Botón menú móvil -->
+      <label
+        id="menu-toggle"
+        class="menu-toggle-label flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-white/20 sm:hidden"
+        aria-label="Abrir menú"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
+        <input type="checkbox" id="menu-checkbox" />
+        <svg viewBox="0 0 32 32" class="size-6">
+          <path
+            class="line line-top-bottom"
+            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+          ></path>
+          <path class="line" d="M7 16 27 16"></path>
+        </svg>
+      </label>
 
-    <!-- Carrito - Siempre a la derecha -->
-    <a
-      href="/carrito"
-      class="ml-2 flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-white/20 sm:size-10"
-      aria-label="Ver carrito"
-    >
-      <CarritoCompra />
-    </a>
+      <!-- Carrito -->
+      <a
+        href="/carrito"
+        class="flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-white/20 sm:size-10"
+        aria-label="Ver carrito"
+      >
+        <CarritoCompra />
+      </a>
+    </div>
   </div>
 
-  <!-- Menú móvil - Solo para móviles pequeños -->
+  <!-- Menú móvil - FUERA del flex principal -->
   <nav
     id="mobile-menu"
-    class="hidden border-t border-white/20 bg-white/10 backdrop-blur-sm sm:hidden"
+    class="hidden w-full border-t border-white/20 bg-white/10 backdrop-blur-lg sm:hidden"
   >
-    <div class="flex flex-col py-2">
+    <div class="px-4 py-2">
       <a
         href="/"
-        class="block px-4 py-3 text-sm font-medium transition-colors hover:bg-black/20"
+        class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
         Inicio
       </a>
       <a
-        href="/productosBox"
-        class="block px-4 py-3 text-sm font-medium transition-colors hover:bg-white/20"
+        href="/productos"
+        class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
         Productos
       </a>
       <a
         href="/acercaDeNosotros"
-        class="block px-4 py-3 text-sm font-medium transition-colors hover:bg-white/20"
+        class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
-        Acerca de Nosotros
+        Acerca de nosotros
       </a>
       <a
-        href="/contacto"
-        class="block px-4 py-3 text-sm font-medium transition-colors hover:bg-white/20"
+        href="/carrito"
+        class="block rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-bloom-accent"
       >
-        Contacto
+        Carrito
       </a>
     </div>
   </nav>
 </header>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (menuToggle && mobileMenu) {
-      menuToggle.addEventListener('click', function () {
-        const isHidden = mobileMenu.classList.contains('hidden');
-
-        if (isHidden) {
-          mobileMenu.classList.remove('hidden');
-          menuToggle.setAttribute('aria-label', 'Cerrar menú');
-          // Cambiar icono a X
-          menuToggle.innerHTML = `
-            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          `;
-        } else {
-          mobileMenu.classList.add('hidden');
-          menuToggle.setAttribute('aria-label', 'Abrir menú');
-          // Cambiar icono a hamburguesa
-          menuToggle.innerHTML = `
-            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          `;
-        }
-      });
-
-      // Cerrar menú cuando se hace clic en un enlace
-      const mobileLinks = mobileMenu.querySelectorAll('a');
-      mobileLinks.forEach((link) => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.add('hidden');
-          menuToggle.setAttribute('aria-label', 'Abrir menú');
-          menuToggle.innerHTML = `
-            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          `;
-        });
-      });
-    }
-  });
-</script>
+<script src="/src/scripts/menuToggle.js" type="text/javascript"></script>
