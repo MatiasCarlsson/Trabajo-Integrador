@@ -1,0 +1,46 @@
+<section class="container mx-auto px-4 py-6">
+  <h1 class="mb-6 text-3xl font-bold">Tu Carrito de Compras</h1>
+
+  <!-- Contenedor del carrito -->
+  <div id="carrito-container">
+    <div id="carrito-vacio" class="hidden py-8 text-center">
+      <p class="text-lg text-gray-600">Tu carrito está vacío</p>
+      <a
+        href="/productos"
+        class="mt-4 inline-block rounded-lg bg-purple-600 px-6 py-2 text-white hover:bg-purple-700"
+      >
+        Ir a comprar
+      </a>
+    </div>
+
+    <div id="carrito-contenido" class="hidden">
+      <div class="rounded-lg bg-white p-6 shadow-md">
+        <div id="items-carrito" class="space-y-4">
+          <!-- Los productos se cargan aquí dinámicamente -->
+        </div>
+
+        <div class="mt-6 border-t pt-4">
+          <div class="flex items-center justify-between text-xl font-bold">
+            <span>Total:</span>
+            <span id="total-carrito">$0</span>
+          </div>
+
+          <div class="mt-4 flex gap-4">
+            <button
+              id="limpiar-carrito"
+              class="rounded-lg bg-red-600 px-6 py-2 text-white hover:bg-red-700"
+            >
+              Vaciar carrito
+            </button>
+            <button
+              id="finalizar-compra"
+              class="flex-1 rounded-lg bg-green-600 px-6 py-2 text-white hover:bg-green-700"
+            >
+              Finalizar compra
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
