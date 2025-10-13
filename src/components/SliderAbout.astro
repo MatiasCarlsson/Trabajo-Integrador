@@ -66,45 +66,84 @@ import '@styles/ArrowSliderAbout.css';
     sliderID,
   }}
 >
-  document.addEventListener('DOMContentLoaded', async () => {
-    try {
-      // Construir la ruta correcta con BASE_URL
-      const baseURL =
-        document.querySelector('base')?.href || window.location.origin;
-      const scriptPath = baseURL.endsWith('/')
-        ? `${baseURL}_astro/slider.js`
-        : `${baseURL}/_astro/slider.js`;
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('Iniciando slider con imágenes:', imagenes);
 
-      const module = await import(scriptPath);
-      const { initSlider } = module;
+    if (!imagenes || !imagenes.length) {
+      console.error('No se proporcionaron imágenes para el slider');
+      return;
+    }
 
-      initSlider(imagenes, sliderID, {
-        texts: descripcion,
-        name: nombre,
-        autoplay: autoplay,
-        autoplaySpeed: autoplaySpeed,
-        resumeAutoplay: true,
-      });
-    } catch (error) {
-      console.error('Error al cargar el slider:', error);
+    // Elementos del DOM
+    const sliderContainer = document.getElementById(sliderID);
+    const img = document.getElementById('sliderImage');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const aboutText = document.getElementById('aboutText');
 
-      // Fallback: cargar directamente desde la carpeta scripts
-      try {
-        const fallbackModule = await import(
-          `${baseURL}/src/scripts/components/slider.js`
-        );
-        const { initSlider } = fallbackModule;
+    if (!sliderContainer || !img || !prevBtn || !nextBtn) {
+      console.error('No se encontraron todos los elementos necesarios para el slider');
+      return;
+    }
 
-        initSlider(imagenes, sliderID, {
-          texts: descripcion,
-          name: nombre,
-          autoplay: autoplay,
-          autoplaySpeed: autoplaySpeed,
-          resumeAutoplay: true,
-        });
-      } catch (fallbackError) {
-        console.error('Error en fallback del slider:', fallbackError);
+    let currentIndex = 0;
+    const isSimpleArray = typeof imagenes[0] === 'string';
+
+    function updateSlider() {
+      if (isSimpleArray) {
+        img.src = imagenes[currentIndex];
+        img.alt = `Slide ${currentIndex + 1}`;
+        if (aboutText && descripcion && descripcion[currentIndex]) {
+          aboutText.textContent = descripcion[currentIndex];
+        }
+      } else {
+        img.src = imagenes[currentIndex].src || imagenes[currentIndex].image;
+        img.alt = imagenes[currentIndex].alt || `Slide ${currentIndex + 1}`;
+        if (aboutText && imagenes[currentIndex].text) {
+          aboutText.textContent = imagenes[currentIndex].text;
+        }
       }
     }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + imagenes.length) % imagenes.length;
+      updateSlider();
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % imagenes.length;
+      updateSlider();
+    }
+
+    // Event listeners
+    prevBtn.addEventListener('click', prevImage);
+    nextBtn.addEventListener('click', nextImage);
+
+    // Autoplay
+    if (autoplay) {
+      let interval;
+
+      function startAutoplay() {
+        if (interval) clearInterval(interval);
+        interval = setInterval(nextImage, autoplaySpeed || 3000);
+      }
+
+      startAutoplay();
+
+      sliderContainer.addEventListener('mouseenter', () => {
+        clearInterval(interval);
+        interval = null;
+      });
+
+      sliderContainer.addEventListener('mouseleave', () => {
+        startAutoplay();
+      });
+
+      window.addEventListener('beforeunload', () => {
+        if (interval) clearInterval(interval);
+      });
+    }
+
+    updateSlider();
   });
 </script>
