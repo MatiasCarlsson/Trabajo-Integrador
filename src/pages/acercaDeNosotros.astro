@@ -4,7 +4,14 @@ import Layout from '@layouts/Layout.astro';
 
 import jsonData from '@scripts/util/data/infoSliderAbout.json';
 
-const imagenes = jsonData.map((item) => item.imagen);
+// Función helper para construir URLs correctas
+function createURL(path: string) {
+  const base = import.meta.env.BASE_URL || '/';
+  const cleanPath = path.replace(/^\//, '');
+  return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
+}
+
+const imagenes = jsonData.map((item) => createURL(item.imagen));
 const descripcion = jsonData.map((item) => item.descripcion);
 ---
 
@@ -13,6 +20,3 @@ const descripcion = jsonData.map((item) => item.descripcion);
     <SliderAbout imagenes={imagenes} descripcion={descripcion} client:load />
   </main>
 </Layout>
-<script>
-  import '/src/scripts/components/slider.js';
-</script>
