@@ -66,11 +66,32 @@ import '@styles/ArrowSliderAbout.css';
     sliderID,
   }}
 >
-  document.addEventListener('DOMContentLoaded', () => {
-    // Importar la función después del DOMContentLoaded
-    import('/src/scripts/components/slider.js')
-      .then((module) => {
-        const { initSlider } = module;
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      // Construir la ruta correcta con BASE_URL
+      const baseURL = document.querySelector('base')?.href || window.location.origin;
+      const scriptPath = baseURL.endsWith('/') 
+        ? `${baseURL}_astro/slider.js`
+        : `${baseURL}/_astro/slider.js`;
+      
+      const module = await import(scriptPath);
+      const { initSlider } = module;
+      
+      initSlider(imagenes, sliderID, {
+        texts: descripcion,
+        name: nombre,
+        autoplay: autoplay,
+        autoplaySpeed: autoplaySpeed,
+        resumeAutoplay: true,
+      });
+    } catch (error) {
+      console.error('Error al cargar el slider:', error);
+      
+      // Fallback: cargar directamente desde la carpeta scripts
+      try {
+        const fallbackModule = await import('/src/scripts/components/slider.js');
+        const { initSlider } = fallbackModule;
+        
         initSlider(imagenes, sliderID, {
           texts: descripcion,
           name: nombre,
@@ -78,9 +99,9 @@ import '@styles/ArrowSliderAbout.css';
           autoplaySpeed: autoplaySpeed,
           resumeAutoplay: true,
         });
-      })
-      .catch((error) => {
-        console.error('Error al cargar el módulo del slider:', error);
-      });
+      } catch (fallbackError) {
+        console.error('Error en fallback del slider:', fallbackError);
+      }
+    }
   });
 </script>
