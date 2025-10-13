@@ -69,14 +69,15 @@ import '@styles/ArrowSliderAbout.css';
   document.addEventListener('DOMContentLoaded', async () => {
     try {
       // Construir la ruta correcta con BASE_URL
-      const baseURL = document.querySelector('base')?.href || window.location.origin;
-      const scriptPath = baseURL.endsWith('/') 
+      const baseURL =
+        document.querySelector('base')?.href || window.location.origin;
+      const scriptPath = baseURL.endsWith('/')
         ? `${baseURL}_astro/slider.js`
         : `${baseURL}/_astro/slider.js`;
-      
+
       const module = await import(scriptPath);
       const { initSlider } = module;
-      
+
       initSlider(imagenes, sliderID, {
         texts: descripcion,
         name: nombre,
@@ -86,12 +87,14 @@ import '@styles/ArrowSliderAbout.css';
       });
     } catch (error) {
       console.error('Error al cargar el slider:', error);
-      
+
       // Fallback: cargar directamente desde la carpeta scripts
       try {
-        const fallbackModule = await import('/src/scripts/components/slider.js');
+        const fallbackModule = await import(
+          `${baseURL}/src/scripts/components/slider.js`
+        );
         const { initSlider } = fallbackModule;
-        
+
         initSlider(imagenes, sliderID, {
           texts: descripcion,
           name: nombre,
