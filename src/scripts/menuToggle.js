@@ -4,20 +4,16 @@ document.addEventListener('DOMContentLoaded', function () {
   const menuToggle = document.getElementById('menu-toggle');
 
   if (menuCheckbox && mobileMenu && menuToggle) {
-    console.log('Elementos del menú encontrados correctamente');
-
     // Función para actualizar el menú basado en el estado del checkbox
     function updateMenu() {
       if (menuCheckbox.checked) {
         // Menú abierto
         mobileMenu.classList.remove('hidden');
         menuToggle.setAttribute('aria-label', 'Cerrar menú');
-        console.log('Menú abierto');
       } else {
         // Menú cerrado
         mobileMenu.classList.add('hidden');
         menuToggle.setAttribute('aria-label', 'Abrir menú');
-        console.log('Menú cerrado');
       }
     }
 
@@ -28,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function cerrarMenu() {
       menuCheckbox.checked = false;
       updateMenu();
-      console.log('Menú cerrado desde enlace');
     }
 
     // Cerrar menú cuando se hace clic en un enlace

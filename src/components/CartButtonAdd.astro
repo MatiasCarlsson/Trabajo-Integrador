@@ -19,9 +19,11 @@ interface ProductoCarrito {
   Añadir al carrito
 </button>
 <script>
+  import '/src/scripts/carrito-pages-jquery.js';
   declare global {
     interface Window {
       agregarAlCarrito: (producto: any) => void;
+      updateCartCount: () => void;
     }
   }
   document.addEventListener('DOMContentLoaded', () => {
@@ -57,12 +59,11 @@ interface ProductoCarrito {
 
       localStorage.setItem('carrito', JSON.stringify(carrito));
 
-      // Mostrar resumen completo del carrito
-      console.log('📋 RESUMEN DEL CARRITO:');
-      const carritoActual = JSON.parse(localStorage.getItem('carrito') || '[]');
-      carritoActual.forEach((item: any) => {
-        console.log(`   • ${item.nombre}: ${item.cantidad} unidades`);
-      });
+      if (typeof window.updateCartCount === 'function') {
+        window.updateCartCount();
+      } else {
+        console.error('❌ window.updateCartCount no existe');
+      }
 
       alert(`${producto.nombre} ha sido añadido al carrito`);
     });
