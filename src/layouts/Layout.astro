@@ -1,7 +1,7 @@
 ---
 import Header from '@components/Header.astro';
 import '@styles/layout.css';
-import bloom_logo from '@public/bloom_logo.ico';
+
 interface Props {
   title?: string;
 }
@@ -14,6 +14,17 @@ const { title = 'Bloom Distribuciones' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      crossorigin="anonymous"></script>
+
+    <script>
+      import '/src/scripts/carrito-pages-jquery.js';
+    </script>
     <link rel="icon" type="image/x-icon" />
     <title>{title}</title>
   </head>

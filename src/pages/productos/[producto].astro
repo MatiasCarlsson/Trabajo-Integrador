@@ -86,6 +86,12 @@ function createURL(path: string) {
 </Layout>
 
 <script>
+  declare global {
+    interface Window {
+      updateCartCount: () => void;
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const button = document.getElementById('add-to-cart') as HTMLButtonElement;
 
@@ -116,6 +122,13 @@ function createURL(path: string) {
       }
 
       localStorage.setItem('carrito', JSON.stringify(carrito));
+
+      if (typeof window.updateCartCount === 'function') {
+        window.updateCartCount();
+      } else {
+        console.error('❌ window.updateCartCount no existe');
+      }
+
       alert(`${producto.nombre} ha sido añadido al carrito`);
     });
   });
