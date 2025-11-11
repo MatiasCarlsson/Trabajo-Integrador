@@ -1,8 +1,17 @@
 ---
-import productos from '@data/productos.json';
+import { getProductosDestacados } from '@services/productService';
 
-// Seleccionamos solo 6 productos para mostrar en la cuadrícula
-const productosDestacados = productos.slice(0, 6);
+// Obtener productos destacados desde la base de datos
+const productosDB = await getProductosDestacados(6);
+
+// Transformar los datos
+const productosDestacados = productosDB.map((p) => ({
+  nombre: p.nombre,
+  puntos: p.puntos,
+  precio: p.precio,
+  imagen: p.imagen_url,
+  descripcion: p.descripcion,
+}));
 
 // Helper para crear URLs con base path
 function createURL(path: string) {

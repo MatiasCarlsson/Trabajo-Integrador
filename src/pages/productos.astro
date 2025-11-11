@@ -1,9 +1,21 @@
 ---
-import productos from '@data/productos.json';
+import { getAllProductos } from '@services/productService';
 import Layout from '@layouts/Layout.astro';
 import ProductCard from '@components/ProductCard.astro';
+
+// Obtener productos desde la base de datos
+const productos = await getAllProductos();
+
+// Transformar los datos para que coincidan con el formato esperado
+const productosFormateados = productos.map((p) => ({
+  nombre: p.nombre,
+  puntos: p.puntos,
+  precio: p.precio,
+  imagen: p.imagen_url,
+  descripcion: p.descripcion,
+}));
 ---
 
 <Layout>
-  <ProductCard productos={productos} />
+  <ProductCard productos={productosFormateados} />
 </Layout>

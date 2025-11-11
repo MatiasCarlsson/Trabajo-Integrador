@@ -1,0 +1,134 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { countProductos, getProductosStats } from '@services/productService';
+
+let error: string | null = null;
+let totalProductos = 0;
+let stats: any = null;
+
+try {
+  totalProductos = await countProductos();
+  stats = await getProductosStats();
+} catch (e: any) {
+  error = e.message;
+  console.error('Error conectando a la base de datos:', e);
+}
+---
+
+<Layout title="Test de Conexión a Base de Datos">
+  <div class="container mx-auto my-8 px-4">
+    <h1 class="mb-6 text-3xl font-bold">🔌 Test de Conexión a MySQL</h1>
+
+    {error ? (
+      <div class="rounded-lg border-2 border-red-500 bg-red-50 p-6">
+        <h2 class="mb-2 text-xl font-bold text-red-700">❌ Error de Conexión</h2>
+        <p class="text-red-600 mb-4">{error}</p>
+        
+        <div class="mt-4 rounded bg-white p-4">
+          <h3 class="font-bold mb-2">Verifica lo siguiente:</h3>
+          <ul class="list-disc pl-6 space-y-1 text-sm">
+            <li>MySQL está corriendo en tu sistema</li>
+            <li>El archivo .env tiene las credenciales correctas</li>
+            <li>La base de datos 'omnilife_db' existe</li>
+            <li>Has ejecutado los scripts schema.sql e insert_productos.sql</li>
+          </ul>
+        </div>
+
+        <div class="mt-4 rounded bg-gray-100 p-4">
+          <h3 class="font-bold mb-2">Comandos para solucionar:</h3>
+          <pre class="text-xs overflow-x-auto"><code>mysql -u root -p &lt; database/schema.sql
+mysql -u root -p omnilife_db &lt; database/insert_productos.sql</code></pre>
+        </div>
+      </div>
+    ) : (
+      <div class="rounded-lg border-2 border-green-500 bg-green-50 p-6">
+        <h2 class="mb-4 text-xl font-bold text-green-700">✅ Conexión Exitosa</h2>
+        
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="rounded-lg bg-white p-4 shadow">
+            <h3 class="mb-2 text-lg font-semibold">Total de Productos</h3>
+            <p class="text-3xl font-bold text-purple-600">{totalProductos}</p>
+          </div>
+
+          {stats && (
+            <>
+              <div class="rounded-lg bg-white p-4 shadow">
+                <h3 class="mb-2 text-lg font-semibold">Precio Promedio</h3>
+                <p class="text-2xl font-bold text-blue-600">
+                  ${Math.round(stats.precio_promedio).toLocaleString('es-AR')}
+                </p>
+              </div>
+
+              <div class="rounded-lg bg-white p-4 shadow">
+                <h3 class="mb-2 text-lg font-semibold">Rango de Precios</h3>
+                <p class="text-sm">
+                  Mín: <span class="font-bold">${stats.precio_minimo.toLocaleString('es-AR')}</span>
+                </p>
+                <p class="text-sm">
+                  Máx: <span class="font-bold">${stats.precio_maximo.toLocaleString('es-AR')}</span>
+                </p>
+              </div>
+
+              <div class="rounded-lg bg-white p-4 shadow">
+                <h3 class="mb-2 text-lg font-semibold">Puntos Promedio</h3>
+                <p class="text-2xl font-bold text-orange-600">
+                  {Math.round(stats.puntos_promedio)}
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div class="mt-6 rounded-lg bg-blue-50 p-4">
+          <h3 class="mb-2 font-bold text-blue-900">🎉 ¡Todo funciona correctamente!</h3>
+          <p class="text-sm text-blue-800">
+            La conexión a MySQL está funcionando. Puedes ver los productos en:
+          </p>
+          <ul class="mt-2 space-y-1 text-sm">
+            <li>
+              <a href="/Trabajo-Integrador/productos" class="text-blue-600 underline hover:text-blue-800">
+                → Ver todos los productos
+              </a>
+            </li>
+            <li>
+              <a href="/Trabajo-Integrador/" class="text-blue-600 underline hover:text-blue-800">
+                → Ir a la página principal
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    )}
+
+    <div class="mt-8 rounded-lg bg-gray-100 p-6">
+      <h3 class="mb-3 text-lg font-bold">📚 Información del Sistema</h3>
+      <div class="grid gap-2 text-sm">
+        <div class="flex justify-between">
+          <span class="font-semibold">Base de Datos:</span>
+          <span class="font-mono">omnilife_db</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold">Host:</span>
+          <span class="font-mono">{import.meta.env.DB_HOST || 'localhost'}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold">Puerto:</span>
+          <span class="font-mono">{import.meta.env.DB_PORT || '3306'}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-semibold">Usuario:</span>
+          <span class="font-mono">{import.meta.env.DB_USER || 'root'}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-center">
+      <a 
+        href="/Trabajo-Integrador/" 
+        class="inline-block rounded-lg bg-purple-600 px-6 py-2 text-white hover:bg-purple-700"
+      >
+        Volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>
