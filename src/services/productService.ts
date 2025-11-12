@@ -1,24 +1,37 @@
 // src/services/productService.ts
 // Servicio para manejar operaciones relacionadas con productos
 
-import { query, type Producto } from '../lib/db';
+import { supabase } from '../lib/db';
+import type { Producto } from '../lib/db';
 
 /**
  * Obtener todos los productos
  */
 export async function getAllProductos(): Promise<Producto[]> {
-  return await query<Producto[]>('SELECT * FROM productos ORDER BY nombre ASC');
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .order('nombre', { ascending: true });
+
+  if (error) throw error;
+  return data || [];
 }
 
 /**
  * Obtener un producto por ID
  */
 export async function getProductoById(id: number): Promise<Producto | null> {
-  const productos = await query<Producto[]>(
-    'SELECT * FROM productos WHERE id = ?',
-    [id]
-  );
-  return productos.length > 0 ? productos[0] : null;
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') return null; // Not found
+    throw error;
+  }
+  return data;
 }
 
 /**
@@ -29,21 +42,31 @@ export async function getProductoByNombre(
 ): Promise<Producto | null> {
   // Decodificar el nombre de la URL y buscar
   const nombreDecodificado = decodeURIComponent(nombre.replace(/-/g, ' '));
-  const productos = await query<Producto[]>(
-    'SELECT * FROM productos WHERE LOWER(nombre) = LOWER(?)',
-    [nombreDecodificado]
-  );
-  return productos.length > 0 ? productos[0] : null;
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .ilike('nombre', nombreDecodificado)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') return null; // Not found
+    throw error;
+  }
+  return data;
 }
 
 /**
  * Buscar productos por texto
  */
 export async function searchProductos(searchTerm: string): Promise<Producto[]> {
-  return await query<Producto[]>(
-    'SELECT * FROM productos WHERE nombre LIKE ? OR descripcion LIKE ? ORDER BY nombre ASC',
-    [`%${searchTerm}%`, `%${searchTerm}%`]
-  );
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .or(`nombre.ilike.%${searchTerm}%,descripcion.ilike.%${searchTerm}%`)
+    .order('nombre', { ascending: true });
+
+  if (error) throw error;
+  return data || [];
 }
 
 /**
@@ -53,10 +76,15 @@ export async function getProductosByPrecio(
   min: number,
   max: number
 ): Promise<Producto[]> {
-  return await query<Producto[]>(
-    'SELECT * FROM productos WHERE precio BETWEEN ? AND ? ORDER BY precio ASC',
-    [min, max]
-  );
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .gte('precio', min)
+    .lte('precio', max)
+    .order('precio', { ascending: true });
+
+  if (error) throw error;
+  return data || [];
 }
 
 /**
@@ -65,11 +93,15 @@ export async function getProductosByPrecio(
 export async function getProductosDestacados(
   limit: number = 6
 ): Promise<Producto[]> {
-  // LIMIT no acepta placeholders en MySQL2, usamos interpolación segura con parseInt
-  const safeLimit = parseInt(limit.toString(), 10);
-  return await query<Producto[]>(
-    `SELECT * FROM productos ORDER BY puntos DESC, precio DESC LIMIT ${safeLimit}`
-  );
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .order('puntos', { ascending: false })
+    .order('precio', { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data || [];
 }
 
 /**
@@ -78,35 +110,60 @@ export async function getProductosDestacados(
 export async function getProductosRecientes(
   limit: number = 10
 ): Promise<Producto[]> {
-  // LIMIT no acepta placeholders en MySQL2, usamos interpolación segura con parseInt
-  const safeLimit = parseInt(limit.toString(), 10);
-  return await query<Producto[]>(
-    `SELECT * FROM productos ORDER BY created_at DESC LIMIT ${safeLimit}`
-  );
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data || [];
 }
 
 /**
  * Contar total de productos
  */
 export async function countProductos(): Promise<number> {
-  const result = await query<any[]>('SELECT COUNT(*) as total FROM productos');
-  return result[0].total;
+  const { count, error } = await supabase
+    .from('productos')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) throw error;
+  return count || 0;
 }
 
 /**
  * Obtener estadísticas de productos
  */
 export async function getProductosStats() {
-  const result = await query<any[]>(`
-    SELECT 
-      COUNT(*) as total,
-      MIN(precio) as precio_minimo,
-      MAX(precio) as precio_maximo,
-      AVG(precio) as precio_promedio,
-      MIN(puntos) as puntos_minimo,
-      MAX(puntos) as puntos_maximo,
-      AVG(puntos) as puntos_promedio
-    FROM productos
-  `);
-  return result[0];
+  const { data, error } = await supabase
+    .from('productos')
+    .select('precio, puntos');
+
+  if (error) throw error;
+
+  if (!data || data.length === 0) {
+    return {
+      total: 0,
+      precio_minimo: 0,
+      precio_maximo: 0,
+      precio_promedio: 0,
+      puntos_minimo: 0,
+      puntos_maximo: 0,
+      puntos_promedio: 0,
+    };
+  }
+
+  const precios = data.map((p) => p.precio);
+  const puntos = data.map((p) => p.puntos);
+
+  return {
+    total: data.length,
+    precio_minimo: Math.min(...precios),
+    precio_maximo: Math.max(...precios),
+    precio_promedio: precios.reduce((a, b) => a + b, 0) / precios.length,
+    puntos_minimo: Math.min(...puntos),
+    puntos_maximo: Math.max(...puntos),
+    puntos_promedio: puntos.reduce((a, b) => a + b, 0) / puntos.length,
+  };
 }

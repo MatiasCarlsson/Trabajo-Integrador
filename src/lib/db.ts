@@ -1,43 +1,30 @@
 // src/lib/db.ts
-// Configuración y conexión a la base de datos PostgreSQL (Supabase)
+// Configuración y conexión a Supabase
 
-import { Pool } from 'pg';
+import { createClient } from '@supabase/supabase-js';
 
-// Configuración de la conexión para Supabase
-const config = {
-  connectionString: import.meta.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-};
+const supabaseUrl = import.meta.env.SUPABASE_URL;
+const supabaseKey = import.meta.env.SUPABASE_ANON_KEY;
 
-// Crear pool de conexiones (mejor rendimiento que conexiones individuales)
-let pool: InstanceType<typeof Pool> | null = null;
-
-export function getPool() {
-  if (!pool) {
-    pool = new Pool(config);
-  }
-  return pool;
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    'Faltan variables de entorno: SUPABASE_URL o SUPABASE_ANON_KEY'
+  );
 }
 
-// Función para ejecutar consultas
+// Crear cliente de Supabase
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Función helper para ejecutar consultas SQL raw (si es necesario)
 export async function query<T = any>(sql: string, params?: any[]): Promise<T> {
-  const client = await getPool().connect();
-  try {
-    const result = await client.query(sql, params);
-    return result.rows as T;
-  } finally {
-    client.release();
-  }
+  // Nota: Supabase prefiere usar su API, pero si necesitas SQL raw:
+  // tendrías que usar las funciones RPC o el client de PostgreSQL
+  throw new Error('Use supabase.from() en lugar de query() directa');
 }
 
 // Función para cerrar el pool (útil en desarrollo)
 export async function closePool() {
-  if (pool) {
-    await pool.end();
-    pool = null;
-  }
+  // No es necesario con el cliente de Supabase
 }
 
 // Tipos de datos
