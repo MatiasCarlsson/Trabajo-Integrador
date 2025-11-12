@@ -1,7 +1,18 @@
 ---
-import productos from '@data/productos.json';
+import { getProductosDestacados } from '@services/productService';
 
-const productosDestacados = productos.slice(0, 3);
+// Obtener productos destacados desde Supabase
+const productosDB = await getProductosDestacados(3);
+
+// Transformar formato de DB al formato esperado
+const productosDestacados = productosDB.map(p => ({
+  id: p.id.toString(),
+  nombre: p.nombre,
+  precio: p.precio,
+  puntos: p.puntos,
+  imagen: p.imagen_url,
+  descripcion: p.descripcion
+}));
 
 // Helper para crear URLs con base path
 function createURL(path: string) {
