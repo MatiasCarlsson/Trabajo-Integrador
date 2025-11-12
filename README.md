@@ -1,297 +1,308 @@
-# 🌸 Bloom Distribuciones - E-commerce Web# Astro Starter Kit: Basics
+# 🌸 Bloom Distribuciones - E-commerce Web
 
-> Un sitio web de e-commerce moderno desarrollado con **Astro** y **Tailwind CSS** para la venta de productos de salud y belleza de la marca Omnilife.```sh
+> Un sitio web de e-commerce moderno desarrollado con **Astro**, **Tailwind CSS** y **MySQL** para la venta de productos de salud y belleza de la marca Omnilife.
 
-npm create astro@latest -- --template basics
+![Astro](https://img.shields.io/badge/Astro-5.13.3-blueviolet)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.17-38bdf8)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6)
 
-## 📋 Descripción del Proyecto```
+---
 
-**Bloom Distribuciones** es una plataforma de comercio electrónico que permite a los usuarios explorar, ver detalles y realizar pedidos de productos de salud, belleza y bienestar de la marca Omnilife. El proyecto incluye un sistema de carrito de compras con integración a WhatsApp para finalizar pedidos.> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 📋 Descripción del Proyecto
 
-### 🎯 Funcionalidades Principales## 🚀 Project Structure
+**Bloom Distribuciones** es una plataforma de comercio electrónico que permite a los usuarios explorar, ver detalles y realizar pedidos de productos de salud, belleza y bienestar de la marca Omnilife. El proyecto incluye un sistema de carrito de compras con integración a WhatsApp para finalizar pedidos.
 
-- **Catálogo de productos** con 50+ productos de OmnilifeInside of your Astro project, you'll see the following folders and files:
+### 🎯 Funcionalidades Principales
 
-- **Sistema de carrito** con localStorage para persistencia
+- ✅ **Catálogo de productos** con 85+ productos de Omnilife
+- ✅ **Base de datos MySQL** para gestión de productos
+- ✅ **Sistema de carrito** con localStorage para persistencia
+- ✅ **Páginas dinámicas** para cada producto
+- ✅ **Integración con WhatsApp** para pedidos
+- ✅ **Slider informativo** sobre el equipo
+- ✅ **Diseño responsivo** con Tailwind CSS
+- ✅ **Interfaz moderna** con gradientes y glassmorphism
 
-- **Páginas dinámicas** para cada producto```text
+---
 
-- **Integración con WhatsApp** para pedidos/
+## 🛠️ Stack Tecnológico
 
-- **Slider informativo** sobre el equipo├── public/
+### Frontend
 
-- **Diseño responsivo** con Tailwind CSS│ └── favicon.svg
+- **[Astro 5.13.3](https://astro.build/)** - Framework web moderno
+- **[Tailwind CSS 3.4.17](https://tailwindcss.com/)** - Framework CSS utility-first
+- **TypeScript** - Tipado estático
 
-- **Interfaz moderna** con gradientes y glassmorphism├── src
+### Backend
 
-│   ├── assets
+- **[MySQL 8.0](https://www.mysql.com/)** - Base de datos relacional
+- **[mysql2](https://github.com/sidorares/node-mysql2)** - Cliente MySQL para Node.js
+- **[dotenv](https://github.com/motdotla/dotenv)** - Gestión de variables de entorno
 
-## 🛠️ Stack Tecnológico│   │   └── astro.svg
+---
 
-│   ├── components
+## 🚀 Inicio Rápido
 
-### Frontend Framework│   │   └── Welcome.astro
+### Prerequisitos
 
-- **[Astro 5.13.3](https://astro.build/)** - Framework web moderno para sitios estáticos y aplicaciones híbridas│   ├── layouts
+- Node.js 18+
+- MySQL 8.0+
+- npm o pnpm
 
-│   │   └── Layout.astro
+### 1. Clonar el repositorio
 
-### Estilización│   └── pages
+```bash
+git clone https://github.com/MatiasCarlsson/Trabajo-Integrador.git
+cd Trabajo-Integrador
+```
 
-- **[Tailwind CSS 3.4.17](https://tailwindcss.com/)** - Framework CSS utility-first│   └── index.astro
+### 2. Instalar dependencias
 
-- **[@astrojs/tailwind 6.0.2](https://docs.astro.build/en/guides/integrations-guide/tailwind/)** - Integración oficial de Tailwind para Astro└── package.json
+```bash
+npm install
+```
 
-````
+### 3. Configurar la base de datos
 
-### Desarrollo
+#### Crear la base de datos
 
-- **TypeScript** - Tipado estático para JavaScriptTo learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+```bash
+mysql -u root -p < database/schema.sql
+mysql -u root -p omnilife_db < database/insert_productos.sql
+```
 
-- **CSS3** - Estilos personalizados y animaciones
+#### Configurar variables de entorno
 
-- **JSON** - Gestión de datos de productos## 🧞 Commands
+Copia el archivo de ejemplo y edítalo con tus credenciales:
 
+```bash
+cp .env.example .env
+```
 
+Edita `.env`:
 
-### Tools & UtilitiesAll commands are run from the root of the project, from a terminal:
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=tu_contraseña
+DB_NAME=omnilife_db
+```
 
-- **[Prettier 3.6.2](https://prettier.io/)** - Formateador de código
+### 4. Probar la conexión
 
-- **prettier-plugin-astro** - Plugin de Prettier para archivos .astro| Command                   | Action                                           |
+```bash
+npm run dev
+```
 
-- **prettier-plugin-tailwindcss** - Plugin para ordenar clases de Tailwind| :------------------------ | :----------------------------------------------- |
+Visita: <http://localhost:4321/Trabajo-Integrador/test-db>
 
-- **csv-parse** - Utilidad para procesamiento de archivos CSV| `npm install`             | Installs dependencies                            |
+### 5. Ver el sitio
 
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+- **Inicio**: <http://localhost:4321/Trabajo-Integrador/>
+- **Productos**: <http://localhost:4321/Trabajo-Integrador/productos>
+- **Carrito**: <http://localhost:4321/Trabajo-Integrador/carrito>
 
-## 📁 Estructura del Proyecto| `npm run build`           | Build your production site to `./dist/`          |
+---
 
-| `npm run preview`         | Preview your build locally, before deploying     |
+## 📁 Estructura del Proyecto
 
-```| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+```text
+Trabajo-Integrador/
+├── database/               # Scripts SQL
+│   ├── schema.sql         # Estructura de tablas
+│   ├── insert_productos.sql # Datos de productos
+│   ├── queries.sql        # Consultas útiles
+│   └── README.md          # Documentación de BD
+├── public/
+│   └── img/               # Imágenes públicas
+├── src/
+│   ├── assets/            # Assets del proyecto
+│   ├── components/        # Componentes Astro
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   ├── ProductCard.astro
+│   │   └── ProductosDestacados.astro
+│   ├── data/              # Datos estáticos (deprecado)
+│   │   └── productos.json
+│   ├── layouts/           # Layouts de página
+│   │   └── Layout.astro
+│   ├── lib/               # Utilidades y configuración
+│   │   └── db.ts         # Conexión a MySQL
+│   ├── pages/             # Páginas del sitio
+│   │   ├── index.astro
+│   │   ├── productos.astro
+│   │   ├── carrito.astro
+│   │   ├── contacto.astro
+│   │   ├── test-db.astro
+│   │   └── productos/
+│   │       └── [producto].astro
+│   ├── scripts/           # Scripts del cliente
+│   │   ├── carrito-page.ts
+│   │   └── menuToggle.js
+│   ├── services/          # Servicios de negocio
+│   │   └── productService.ts
+│   └── styles/            # Estilos globales
+│       └── layout.css
+├── .env                   # Variables de entorno (NO subir a Git)
+├── .env.example          # Ejemplo de configuración
+├── astro.config.mjs      # Configuración de Astro
+├── tailwind.config.js    # Configuración de Tailwind
+├── tsconfig.json         # Configuración de TypeScript
+├── MIGRACION_DB.md       # Guía completa de migración
+├── INICIO_RAPIDO_DB.md   # Inicio rápido con BD
+└── package.json
+```
 
-📦 trabajo-integrador/| `npm run astro -- --help` | Get help using the Astro CLI                     |
+---
 
-├── 🔧 astro.config.mjs          # Configuración de Astro
+## 🗄️ Base de Datos
 
-├── 📋 package.json              # Dependencias y scripts## 👀 Want to learn more?
+### Estructura
 
-├── 🎨 tailwind.config.js        # Configuración de Tailwind CSS
+La base de datos incluye las siguientes tablas:
 
-├── 📝 tsconfig.json             # Configuración de TypeScriptFeel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- **productos** - Catálogo de productos (85 productos)
+- **categorias** - Categorías de productos (preparada para futuro)
+- **producto_categoria** - Relación N:N (preparada para futuro)
+- **inventario** - Control de stock (preparada para futuro)
 
-├── 🌐 public/                   # Archivos estáticos
-│   ├── 🖼️ img/                  # Imágenes del sitio
-│   └── 📄 bloom_logo.ico        # Favicon
-└── 📂 src/
-    ├── 🎨 assets/               # Recursos del proyecto
-    ├── 🧩 components/           # Componentes reutilizables
-    │   ├── 🛒 CarritoCompra.astro
-    │   ├── 📱 Header.astro
-    │   ├── 🛍️ ProductCard.astro
-    │   ├── 🎠 CarrucelProximamente.astro
-    │   └── 📊 SliderAbout.astro
-    ├── 📊 data/
-    │   └── 🛍️ productos.json     # Base de datos de productos
-    ├── 🏗️ layouts/
-    │   └── 📄 Layout.astro       # Layout principal
-    ├── 📄 pages/                # Páginas del sitio
-    │   ├── 🏠 index.astro        # Página de inicio
-    │   ├── 🛍️ productos.astro    # Catálogo de productos
-    │   ├── 🛒 carrito.astro      # Carrito de compras
-    │   ├── ℹ️ acercaDeNosotros.astro
-    │   ├── 📞 contacto.astro
-    │   └── 📁 productos/
-    │       └── 🔗 [producto].astro # Páginas dinámicas de productos
-    ├── 🔧 scripts/              # JavaScript/TypeScript
-    │   ├── 🛒 carrito-page.ts   # Lógica del carrito
-    │   └── 📱 menuToggle.js     # Menú móvil
-    └── 🎨 styles/               # Estilos CSS personalizados
-        ├── 🎯 ArrowSliderAbout.css
-        ├── 🖥️ layout.css
-        └── 📱 menuToggle.css
-````
+### Servicios disponibles
 
-## 🎨 Diseño y UI/UX
+```typescript
+// Obtener todos los productos
+const productos = await getAllProductos();
+
+// Obtener producto por ID
+const producto = await getProductoById(1);
+
+// Buscar productos
+const resultados = await searchProductos('crema');
+
+// Productos destacados
+const destacados = await getProductosDestacados(6);
+
+// Estadísticas
+const stats = await getProductosStats();
+```
+
+📖 **Documentación completa**: Ver [MIGRACION_DB.md](./MIGRACION_DB.md)
+
+---
+
+## 🎨 Características de Diseño
 
 ### Paleta de Colores
 
 ```css
---bloom-bg: #f8f8d9 /* Fondo principal - beige claro */ --bloom-primary: #b1a08a
-  /* Color principal - marrón suave */ --bloom-accent: #bfa4c0
-  /* Acento - lavanda */ --bloom-deep: #968d7d /* Variante oscura */
-  --bloom-contrast: #463c37 /* Texto legible - marrón oscuro */;
+/* Principales */
+--bloom-primary: #9333ea /* Violeta principal */ --bloom-secondary: #ec4899
+  /* Rosa secundario */ /* Gradientes */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 ```
 
-### Características de Diseño
+### Componentes Destacados
 
-- **Gradientes suaves** con colores de la marca
-- **Glassmorphism** en formularios y tarjetas
-- **Animaciones CSS** para mejorar la experiencia
-- **Diseño responsive** optimizado para todos los dispositivos
-- **Iconografía** personalizada y consistente
+- **Header**: Navegación responsive con menú hamburguesa
+- **ProductCard**: Tarjetas de producto con hover effects
+- **Slider**: Carrusel de información del equipo
+- **Footer**: Footer con información de contacto
 
-## 📋 Funcionalidades Detalladas
+---
 
-### 🏠 Página de Inicio
+## 🧪 Testing
 
-- Carrusel de próximos productos
-- Sección de productos destacados
-- Área de combos especiales
-
-### 🛍️ Catálogo de Productos
-
-- Visualización de todos los productos disponibles
-- Tarjetas de producto con imagen, nombre, precio
-- Botones "Añadir al carrito" funcionales
-
-### 🛒 Sistema de Carrito
-
-- **Persistencia** con localStorage del navegador
-- **Gestión de cantidades** (incrementar/decrementar)
-- **Cálculo automático** de totales
-- **Eliminación** de productos individuales
-- **Vaciado completo** del carrito
-- **Generación automática** de mensajes para WhatsApp
-
-### 📱 Integración WhatsApp
-
-```typescript
-// Ejemplo del mensaje generado automáticamente
-🛍️ *Hola! Quiero realizar este pedido:*
-
-1. *Producto A*
-   • Cantidad: 2
-   • Precio unitario: $XX.XXX
-   • Subtotal: $XX.XXX
-
-💰 *TOTAL: $XX.XXX*
-
-¿Podrías confirmar la disponibilidad y el tiempo de entrega?
-¡Gracias! 😊
-```
-
-### 🔗 Páginas Dinámicas
-
-- URLs amigables generadas automáticamente desde nombres de productos
-- Normalización de caracteres especiales y espacios
-- Rutas SEO-optimizadas
-
-## 📊 Gestión de Datos
-
-### Productos
-
-El archivo `productos.json` contiene **50+ productos** con la siguiente estructura:
-
-```json
-{
-  "nombre": "Nombre del Producto",
-  "puntos": 50,
-  "precio": 25000,
-  "imagen": "https://cdn.omnilife.com/...",
-  "descripcion": "Descripción detallada del producto..."
-}
-```
-
-### Características de los Datos
-
-- **Precios** en pesos argentinos
-- **Imágenes** desde CDN oficial de Omnilife
-- **Descripciones** completas de productos
-- **Sistema de puntos** para programa de lealtad
-
-## 🚀 Scripts Disponibles
+### Probar conexión a BD
 
 ```bash
-# Desarrollo - servidor local con hot reload
-npm run dev
-
-# Construcción - optimizada para producción
-npm run build
-
-# Vista previa - servidor de la build de producción
-npm run preview
-
-# Comando Astro - acceso directo a CLI
-npm run astro
+# Navega a
+http://localhost:4321/Trabajo-Integrador/test-db
 ```
 
-## 🌐 Páginas Implementadas
-
-| Página                  | Ruta                  | Descripción                             |
-| ----------------------- | --------------------- | --------------------------------------- |
-| **Inicio**              | `/`                   | Landing page con productos destacados   |
-| **Productos**           | `/productos`          | Catálogo completo de productos          |
-| **Producto Individual** | `/productos/[nombre]` | Detalles específicos de cada producto   |
-| **Carrito**             | `/carrito`            | Gestión completa del carrito de compras |
-| **Acerca de Nosotros**  | `/acercaDeNosotros`   | Slider informativo del equipo           |
-| **Contacto**            | `/contacto`           | Formulario de contacto                  |
-
-## ⚙️ Configuración del Entorno
-
-### Rutas de Importación Configuradas
-
-```json
-{
-  "@components/*": ["src/components/*"],
-  "@layouts/*": ["src/layouts/*"],
-  "@pages/*": ["src/pages/*"],
-  "@data/*": ["src/data/*"],
-  "@styles/*": ["src/styles/*"],
-  "@scripts/*": ["src/scripts/*"],
-  "@public/*": ["public/*"]
-}
-```
-
-### Configuración de Astro
-
-- **Integración Tailwind** activada
-- **DevToolbar** deshabilitado para producción
-- **Configuración estricta** de TypeScript
-
-## 🎯 Estado Actual del Proyecto
-
-### ✅ Funcionalidades Completadas
-
-- [x] Estructura base con Astro
-- [x] Diseño responsive con Tailwind CSS
-- [x] Sistema de navegación completo
-- [x] Catálogo de productos funcional
-- [x] Carrito de compras con localStorage
-- [x] Integración WhatsApp para pedidos
-- [x] Páginas dinámicas de productos
-- [x] Slider informativo del equipo
-- [x] Formulario de contacto
-- [x] Optimización de imágenes y rendimiento
-
-## 📞 Información de Contacto
-
-- **WhatsApp:** +54 9 376 472-5856
-- **Distribuidora:** Bloom Distribuciones
-- **Productos:** Omnilife Argentina
-
-## 🔧 Instalación y Desarrollo
-
-### Prerrequisitos
-
-- Node.js 18+
-- npm o yarn
-
-### Pasos para desarrollo local
+### Verificar productos
 
 ```bash
-# Clonar el repositorio
-git clone [URL_DEL_REPOSITORIO]
-
-# Instalar dependencias
-npm install
-
-# Ejecutar en modo desarrollo
-npm run dev
-
-# El sitio estará disponible en http://localhost:4321
+mysql -u root -p omnilife_db -e "SELECT COUNT(*) FROM productos;"
 ```
 
 ---
+
+## 📦 Comandos Disponibles
+
+| Comando             | Acción                                                        |
+| :------------------ | :------------------------------------------------------------ |
+| `npm install`       | Instala dependencias                                          |
+| `npm run dev`       | Inicia servidor de desarrollo en `localhost:4321`             |
+| `npm run build`     | Construye el sitio para producción en `./dist/`               |
+| `npm run preview`   | Vista previa del build antes de deployar                      |
+| `npm run astro ...` | Ejecuta comandos de Astro CLI como `astro add`, `astro check` |
+
+---
+
+## 🚢 Deployment
+
+### Build para producción
+
+```bash
+npm run build
+```
+
+El sitio compilado estará en `./dist/`
+
+### Variables de entorno de producción
+
+Crea `.env.production`:
+
+```env
+DB_HOST=tu_servidor_mysql
+DB_USER=usuario_produccion
+DB_PASSWORD=contraseña_segura
+DB_NAME=omnilife_db
+```
+
+---
+
+## 🔐 Seguridad
+
+- ✅ Variables de entorno para credenciales
+- ✅ `.env` incluido en `.gitignore`
+- ✅ Prepared statements para prevenir SQL injection
+- ✅ Pool de conexiones para mejor performance
+
+---
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+---
+
+## 📄 Licencia
+
+Este proyecto es privado y pertenece a Bloom Distribuciones.
+
+---
+
+## 👥 Equipo
+
+**Matías Carlsson** - Desarrollador Principal
+
+**Proyecto**: Trabajo Integrador - E-commerce Omnilife
+
+## 📚 Recursos Adicionales
+
+- [Documentación de Astro](https://docs.astro.build)
+- [Documentación de Tailwind CSS](https://tailwindcss.com/docs)
+- [Guía de MySQL](https://dev.mysql.com/doc/)
+- [MIGRACION_DB.md](./MIGRACION_DB.md) - Guía completa de base de datos
+- [INICIO_RAPIDO_DB.md](./INICIO_RAPIDO_DB.md) - Inicio rápido
+
+---
+
+⭐ **Si te gusta este proyecto, dale una estrella en GitHub!**
