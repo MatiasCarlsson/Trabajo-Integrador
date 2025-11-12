@@ -15,13 +15,13 @@ interface ProductoCarrito {
 const productosDB = await getAllProductos();
 
 // Transformar formato de DB al formato esperado por ProductosCard
-const productos = productosDB.map(p => ({
+const productos = productosDB.map((p) => ({
   id: p.id.toString(),
   nombre: p.nombre,
   precio: p.precio,
   puntos: p.puntos,
   imagen: p.imagen_url,
-  descripcion: p.descripcion
+  descripcion: p.descripcion,
 }));
 
 // Helper para crear URLs con base path

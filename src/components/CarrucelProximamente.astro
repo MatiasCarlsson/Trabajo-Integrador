@@ -5,13 +5,13 @@ import { getProductosDestacados } from '@services/productService';
 const productosDB = await getProductosDestacados(3);
 
 // Transformar formato de DB al formato esperado
-const productosDestacados = productosDB.map(p => ({
+const productosDestacados = productosDB.map((p) => ({
   id: p.id.toString(),
   nombre: p.nombre,
   precio: p.precio,
   puntos: p.puntos,
   imagen: p.imagen_url,
-  descripcion: p.descripcion
+  descripcion: p.descripcion,
 }));
 
 // Helper para crear URLs con base path
