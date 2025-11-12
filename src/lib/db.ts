@@ -3,8 +3,10 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+// Configuración de Supabase
+// Estas credenciales son públicas y seguras de exponer (anon key)
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || 'https://eedhkrxokjldkxgfrxua.supabase.co';
+const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZGhrcnhva2psZGt4Z2ZyeHVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5MDM2NTIsImV4cCI6MjA3ODQ3OTY1Mn0.MG4wpL1uzSZJCjpcGcUq9-VYRJMeBpVkFkgo61mnYfU';
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error(
