@@ -1,38 +1,34 @@
 // src/lib/db.ts
-// Configuración y conexión a la base de datos MySQL
+// Configuración y conexión a la base de datos PostgreSQL (Supabase)
 
-import mysql from 'mysql2/promise';
+import { Pool } from 'pg';
 
-// Configuración de la conexión
+// Configuración de la conexión para Supabase
 const config = {
-  host: import.meta.env.DB_HOST || 'localhost',
-  port: parseInt(import.meta.env.DB_PORT || '3306'),
-  user: import.meta.env.DB_USER || 'root',
-  password: import.meta.env.DB_PASSWORD || '',
-  database: import.meta.env.DB_NAME || 'omnilife_db',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+  connectionString: import.meta.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
 
 // Crear pool de conexiones (mejor rendimiento que conexiones individuales)
-let pool: mysql.Pool | null = null;
+let pool: InstanceType<typeof Pool> | null = null;
 
 export function getPool() {
   if (!pool) {
-    pool = mysql.createPool(config);
+    pool = new Pool(config);
   }
   return pool;
 }
 
 // Función para ejecutar consultas
 export async function query<T = any>(sql: string, params?: any[]): Promise<T> {
-  const connection = await getPool().getConnection();
+  const client = await getPool().connect();
   try {
-    const [rows] = await connection.execute(sql, params);
-    return rows as T;
+    const result = await client.query(sql, params);
+    return result.rows as T;
   } finally {
-    connection.release();
+    client.release();
   }
 }
 
