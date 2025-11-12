@@ -1,47 +1,30 @@
 // src/lib/db.ts
-// Configuración y conexión a la base de datos MySQL
+// Configuración y conexión a Supabase
 
-import mysql from 'mysql2/promise';
+import { createClient } from '@supabase/supabase-js';
 
-// Configuración de la conexión
-const config = {
-  host: import.meta.env.DB_HOST || 'localhost',
-  port: parseInt(import.meta.env.DB_PORT || '3306'),
-  user: import.meta.env.DB_USER || 'root',
-  password: import.meta.env.DB_PASSWORD || '',
-  database: import.meta.env.DB_NAME || 'omnilife_db',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-};
+const supabaseUrl = import.meta.env.SUPABASE_URL;
+const supabaseKey = import.meta.env.SUPABASE_ANON_KEY;
 
-// Crear pool de conexiones (mejor rendimiento que conexiones individuales)
-let pool: mysql.Pool | null = null;
-
-export function getPool() {
-  if (!pool) {
-    pool = mysql.createPool(config);
-  }
-  return pool;
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    'Faltan variables de entorno: SUPABASE_URL o SUPABASE_ANON_KEY'
+  );
 }
 
-// Función para ejecutar consultas
+// Crear cliente de Supabase
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Función helper para ejecutar consultas SQL raw (si es necesario)
 export async function query<T = any>(sql: string, params?: any[]): Promise<T> {
-  const connection = await getPool().getConnection();
-  try {
-    const [rows] = await connection.execute(sql, params);
-    return rows as T;
-  } finally {
-    connection.release();
-  }
+  // Nota: Supabase prefiere usar su API, pero si necesitas SQL raw:
+  // tendrías que usar las funciones RPC o el client de PostgreSQL
+  throw new Error('Use supabase.from() en lugar de query() directa');
 }
 
 // Función para cerrar el pool (útil en desarrollo)
 export async function closePool() {
-  if (pool) {
-    await pool.end();
-    pool = null;
-  }
+  // No es necesario con el cliente de Supabase
 }
 
 // Tipos de datos
