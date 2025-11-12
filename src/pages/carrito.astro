@@ -1,7 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import ProductosCard from '@components/ProductCard.astro';
-import productos from '@data/productos.json';
+import { getAllProductos } from '@services/productService';
 
 interface ProductoCarrito {
   id: string;
@@ -10,6 +10,19 @@ interface ProductoCarrito {
   imagen: string;
   cantidad: number;
 }
+
+// Obtener productos desde Supabase
+const productosDB = await getAllProductos();
+
+// Transformar formato de DB al formato esperado por ProductosCard
+const productos = productosDB.map(p => ({
+  id: p.id.toString(),
+  nombre: p.nombre,
+  precio: p.precio,
+  puntos: p.puntos,
+  imagen: p.imagen_url,
+  descripcion: p.descripcion
+}));
 
 // Helper para crear URLs con base path
 function createURL(path: string) {
