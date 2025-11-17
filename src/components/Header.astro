@@ -30,11 +30,12 @@ function createURL(path: string) {
     </div>
 
     <!-- Buscador -->
-    <form class="mx-5 flex flex-1 items-center">
+    <form id="search-form" class="mx-5 flex flex-1 items-center">
       <label for="search" class="sr-only">Buscar productos</label>
       <input
         type="text"
         id="search"
+        name="q"
         placeholder="Buscar productos..."
         class="text-md w-full rounded-md border border-gray-400 px-3 py-2 focus:border-bloom-deep focus:outline-none focus:ring-1 focus:ring-bloom-accent md:text-base"
       />
@@ -133,4 +134,27 @@ function createURL(path: string) {
 
 <script>
   import '/src/scripts/menuToggle.js';
+
+  // Funcionalidad de búsqueda
+  const searchForm = document.getElementById('search-form') as HTMLFormElement;
+  const searchInput = document.getElementById('search') as HTMLInputElement;
+
+  if (searchForm && searchInput) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+
+      if (query) {
+        // Crear URL con base path
+        const base = import.meta.env.BASE_URL || '/';
+        const url = base.endsWith('/')
+          ? `${base}productos`
+          : `${base}/productos`;
+
+        // Redirigir a productos y guardar búsqueda en sessionStorage
+        sessionStorage.setItem('searchQuery', query);
+        window.location.href = url;
+      }
+    });
+  }
 </script>
