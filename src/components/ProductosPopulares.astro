@@ -1,11 +1,11 @@
 ---
 import { getProductosDestacados } from '@services/productService';
 
-// Obtener productos destacados desde Supabase
+// Obtener productos populares desde la base de datos
 const productosDB = await getProductosDestacados(3);
 
 // Transformar formato de DB al formato esperado
-const productosDestacados = productosDB.map((p) => ({
+const productosPopulares = productosDB.map((p) => ({
   id: p.id.toString(),
   nombre: p.nombre,
   precio: p.precio,
@@ -19,6 +19,16 @@ function createURL(path: string) {
   const base = import.meta.env.BASE_URL || '/';
   const cleanPath = path.replace(/^\//, '');
   return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
+}
+
+// Helper para crear URL de producto
+function removeAccents(texto?: string): string {
+  return texto?.normalize('NFD').replace(/[\u0300-\u036f]/g, '') || '';
+}
+
+function createProductURL(nombre: string): string {
+  const slug = removeAccents(nombre.toLowerCase().replace(/ /g, '-'));
+  return createURL(`productos/${slug}`);
 }
 ---
 
@@ -34,12 +44,17 @@ function createURL(path: string) {
 
       <div
         class="carousel-container relative h-[200px] overflow-hidden rounded-lg border border-gray-200 md:h-[280px]"
+        id="carousel-productos"
       >
-        <!-- Carrusel simple estático por ahora -->
-        <div class="flex gap-2 p-2 md:gap-4 md:p-4">
+        <!-- Carrusel funcional con rotación automática -->
+        <div class="carousel-track flex gap-2 p-2 transition-transform duration-500 ease-in-out md:gap-4 md:p-4">
           {
-            productosDestacados.map((producto) => (
-              <div class="w-full flex-shrink-0">
+            productosPopulares.map((producto, index) => (
+              <a
+                href={createProductURL(producto.nombre)}
+                class="carousel-item w-full flex-shrink-0 cursor-pointer transition-opacity hover:opacity-80"
+                data-index={index}
+              >
                 <img
                   src={producto.imagen}
                   alt={producto.nombre || 'Imagen de producto Seytú'}
@@ -51,19 +66,31 @@ function createURL(path: string) {
                 <p class="text-center text-xs font-bold text-bloom-accent md:text-sm">
                   ${producto.precio.toLocaleString('es-AR')}
                 </p>
-              </div>
+              </a>
             ))
           }
         </div>
 
-        <!-- Indicadores de puntos (estáticos) -->
-        <div class="mt-2 flex justify-center gap-1 md:mt-4 md:gap-2">
-          <span class="h-2 w-2 rounded-full bg-bloom-primary md:h-3 md:w-3"
-          ></span>
-          <span class="h-2 w-2 rounded-full bg-gray-300 md:h-3 md:w-3"></span>
-          <span class="h-2 w-2 rounded-full bg-gray-300 md:h-3 md:w-3"></span>
+        <!-- Indicadores de puntos (dinámicos) -->
+        <div class="carousel-indicators mt-2 flex justify-center gap-1 md:mt-4 md:gap-2">
+          {
+            productosPopulares.map((_, index) => (
+              <button
+                class={`carousel-dot h-2 w-2 rounded-full transition-colors md:h-3 md:w-3 ${
+                  index === 0 ? 'bg-bloom-primary' : 'bg-gray-300'
+                }`}
+                data-index={index}
+                aria-label={`Ir al producto ${index + 1}`}
+              />
+            ))
+          }
         </div>
       </div>
+
+      <script>
+        import { initCarouselProductos } from '@scripts/components/carouselProductos';
+        initCarouselProductos();
+      </script>
     </div>
 
     <!-- Columna derecha: Descripción -->

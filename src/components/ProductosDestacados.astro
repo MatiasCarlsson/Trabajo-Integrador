@@ -1,8 +1,15 @@
 ---
 import { getProductosDestacados } from '@services/productService';
 
-// Obtener productos destacados desde la base de datos
-const productosDB = await getProductosDestacados(6);
+// Obtener productos destacados desde MySQL
+let productosDB = [];
+try {
+  productosDB = await getProductosDestacados(6);
+  console.log('✅ Productos cargados exitosamente:', productosDB.length);
+} catch (error) {
+  console.error('❌ Error al cargar productos:', error);
+  throw error;
+}
 
 // Transformar los datos
 const productosDestacados = productosDB.map((p) => ({
@@ -19,6 +26,21 @@ function createURL(path: string) {
   const cleanPath = path.replace(/^\//, '');
   return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
 }
+
+function formatPrice(precio: number) {
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    minimumFractionDigits: 2,
+  }).format(precio);
+}
+
+function removeAccents(texto?: string): string {
+  return texto?.normalize('NFD').replace(/[\u0300-\u036f]/g, '') || '';
+}
+
+const stylesAncor =
+  'rounded bg-bloom-accent px-3 py-1.5 text-center text-xs text-white transition hover:bg-bloom-deep md:px-4 md:py-2 md:text-sm';
 ---
 
 <section class="container mx-auto my-8 px-4 md:my-12">
@@ -53,11 +75,11 @@ function createURL(path: string) {
             </p>
             <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between md:mt-4">
               <span class="text-base font-bold text-bloom-primary md:text-lg">
-                ${producto.precio?.toLocaleString('es-AR')}
+                {formatPrice(producto.precio)} ARS
               </span>
               <a
-                href={`/Trabajo-Integrador/productos/${producto.nombre?.toLowerCase().replace(/ /g, '-')}`}
-                class="rounded bg-bloom-accent px-3 py-1.5 text-center text-xs text-white transition hover:bg-bloom-deep md:px-4 md:py-2 md:text-sm"
+                href={`/Trabajo-Integrador/productos/${removeAccents(producto.nombre?.toLowerCase().replace(/ /g, '-'))}`}
+                class={stylesAncor}
               >
                 Ver detalles
               </a>
@@ -69,7 +91,7 @@ function createURL(path: string) {
   </div>
 
   <!-- Sección de Combos -->
-  <div class="mt-12 md:mt-16">
+  <section class="mt-12 md:mt-16">
     <h2
       class="mb-6 text-center text-xl font-bold text-bloom-primary md:text-2xl"
     >
@@ -128,5 +150,5 @@ function createURL(path: string) {
         </a>
       </div>
     </div>
-  </div>
+  </section>
 </section>

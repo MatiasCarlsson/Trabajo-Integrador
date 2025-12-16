@@ -9,13 +9,7 @@ interface ProductoCarrito {
 }
 ---
 
-<button
-  id="add-to-cart"
-  data-id={id}
-  data-nombre={nombre}
-  data-precio={precio}
-  class="rounded-lg bg-pink-500 px-6 py-2 text-white hover:bg-purple-700"
->
+<button id="add-to-cart" data-id={id} data-nombre={nombre} data-precio={precio}>
   Añadir al carrito
 </button>
 <script>
@@ -49,12 +43,8 @@ interface ProductoCarrito {
 
       if (existente) {
         existente.cantidad = (existente.cantidad || 1) + 1;
-        console.log(
-          `✅ ${existente.nombre}: ahora tienes ${existente.cantidad} unidades`
-        );
       } else {
         carrito.push({ ...producto, cantidad: 1 });
-        console.log(`🆕 ${producto.nombre}: agregado con 1 unidad`);
       }
 
       localStorage.setItem('carrito', JSON.stringify(carrito));

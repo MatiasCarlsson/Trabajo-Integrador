@@ -3,19 +3,238 @@ import { getAllProductos } from '@services/productService';
 import Layout from '@layouts/Layout.astro';
 import ProductCard from '@components/ProductCard.astro';
 
-// Obtener productos desde la base de datos
-const productos = await getAllProductos();
+// Obtener todos los productos
+const productosDB = await getAllProductos();
 
-// Transformar los datos para que coincidan con el formato esperado
-const productosFormateados = productos.map((p) => ({
+// Transformar para el componente
+const productosFormateados = productosDB.map((p) => ({
+  id: p.id.toString(),
   nombre: p.nombre,
-  puntos: p.puntos,
   precio: p.precio,
+  puntos: p.puntos,
   imagen: p.imagen_url,
   descripcion: p.descripcion,
 }));
 ---
 
-<Layout>
-  <ProductCard productos={productosFormateados} />
+<Layout title="Productos - Bloom">
+  <section class="min-h-screen py-8">
+    <div class="container mx-auto px-4">
+      <h1 class="mb-6 text-3xl font-bold text-bloom-contrast">
+        Catálogo de Productos
+      </h1>
+
+      <!-- Filtros del lado del cliente -->
+      <div class="mb-6 rounded-lg bg-white p-6 shadow-md">
+        <div class="flex flex-col gap-4 md:flex-row md:items-end">
+          <!-- Ordenar por -->
+          <div class="flex-1">
+            <label
+              for="ordenar"
+              class="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Ordenar por
+            </label>
+            <select
+              id="ordenar"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200"
+            >
+              <option value="nombre-asc">Nombre (A-Z)</option>
+              <option value="nombre-desc">Nombre (Z-A)</option>
+              <option value="precio-asc">Precio (menor a mayor)</option>
+              <option value="precio-desc">Precio (mayor a menor)</option>
+            </select>
+          </div>
+
+          <!-- Filtros de precio -->
+          <div class="flex-1">
+            <label
+              for="precioMin"
+              class="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Rango de precio
+            </label>
+            <div class="flex gap-2">
+              <input
+                type="number"
+                id="precioMin"
+                placeholder="Mínimo"
+                min="0"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200"
+              />
+              <span class="flex items-center text-gray-500">-</span>
+              <input
+                type="number"
+                id="precioMax"
+                placeholder="Máximo"
+                min="0"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200"
+              />
+            </div>
+          </div>
+
+          <!-- Botón limpiar filtros -->
+          <div>
+            <button
+              id="limpiar-filtros"
+              class="rounded-lg bg-purple-600 px-6 py-2 text-white transition hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+            >
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje de resultados -->
+      <p id="results-count" class="mb-4 text-sm text-gray-600">
+        Mostrando {productosFormateados.length} productos
+      </p>
+
+      <!-- Grid de productos -->
+      <div id="productos-container">
+        <ProductCard productos={productosFormateados} />
+      </div>
+
+      <!-- Mensaje cuando no hay resultados -->
+      <div id="no-results" class="hidden py-12 text-center">
+        <p class="mb-4 text-lg text-gray-600">
+          No se encontraron productos con los filtros seleccionados
+        </p>
+        <button
+          id="reset-filters"
+          class="inline-block rounded-lg bg-purple-600 px-6 py-2 text-white hover:bg-purple-700"
+        >
+          Limpiar filtros
+        </button>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<script>
+  // Datos de productos en JSON para filtrado del lado del cliente
+  const todosLosProductos = Array.from(
+    document.querySelectorAll('[data-producto]')
+  ).map((el) => {
+    const card = el as HTMLElement;
+    return {
+      element: card,
+      nombre: card.dataset.nombre || '',
+      precio: parseFloat(card.dataset.precio || '0'),
+      puntos: parseInt(card.dataset.puntos || '0'),
+    };
+  });
+
+  // Calcular precio mínimo y máximo
+  const precios = todosLosProductos.map((p) => p.precio);
+  const precioMinimo = Math.min(...precios);
+  const precioMaximo = Math.max(...precios);
+
+  const ordenarSelect = document.getElementById('ordenar') as HTMLSelectElement;
+  const precioMinInput = document.getElementById(
+    'precioMin'
+  ) as HTMLInputElement;
+  const precioMaxInput = document.getElementById(
+    'precioMax'
+  ) as HTMLInputElement;
+  const limpiarBtn = document.getElementById(
+    'limpiar-filtros'
+  ) as HTMLButtonElement;
+  const resetBtn = document.getElementById(
+    'reset-filters'
+  ) as HTMLButtonElement;
+  const resultsCount = document.getElementById('results-count') as HTMLElement;
+  const noResults = document.getElementById('no-results') as HTMLElement;
+
+  // Establecer placeholders dinámicos
+  if (precioMinInput) {
+    precioMinInput.placeholder = `$${precioMinimo.toFixed(2)}`;
+  }
+  if (precioMaxInput) {
+    precioMaxInput.placeholder = `$${precioMaximo.toFixed(2)}`;
+  }
+
+  // Leer búsqueda del sessionStorage
+  const searchQuery = sessionStorage.getItem('searchQuery');
+  if (searchQuery) {
+    sessionStorage.removeItem('searchQuery');
+  }
+
+  function aplicarFiltros() {
+    const orden = ordenarSelect.value;
+    const precioMin = precioMinInput.value
+      ? parseFloat(precioMinInput.value)
+      : 0;
+    const precioMax = precioMaxInput.value
+      ? parseFloat(precioMaxInput.value)
+      : Infinity;
+    const busqueda = searchQuery?.toLowerCase().trim() || '';
+
+    // Filtrar productos
+    let productosFiltrados = todosLosProductos.filter((p) => {
+      const matchPrecio = p.precio >= precioMin && p.precio <= precioMax;
+      const matchBusqueda =
+        !busqueda || p.nombre.toLowerCase().includes(busqueda);
+      return matchPrecio && matchBusqueda;
+    });
+
+    // Ordenar productos
+    productosFiltrados.sort((a, b) => {
+      switch (orden) {
+        case 'nombre-asc':
+          return a.nombre.localeCompare(b.nombre);
+        case 'nombre-desc':
+          return b.nombre.localeCompare(a.nombre);
+        case 'precio-asc':
+          return a.precio - b.precio;
+        case 'precio-desc':
+          return b.precio - a.precio;
+        case 'puntos-desc':
+          return b.puntos - a.puntos;
+        default:
+          return 0;
+      }
+    });
+
+    // Ocultar todos los productos
+    todosLosProductos.forEach((p) => {
+      p.element.style.display = 'none';
+    });
+
+    // Mostrar productos filtrados en orden
+    const container = productosFiltrados[0]?.element.parentElement;
+    if (container) {
+      productosFiltrados.forEach((p, index) => {
+        p.element.style.display = '';
+        container.appendChild(p.element);
+      });
+    }
+
+    // Actualizar contador
+    resultsCount.textContent = `Mostrando ${productosFiltrados.length} de ${todosLosProductos.length} productos`;
+
+    // Mostrar/ocultar mensaje de "no hay resultados"
+    if (productosFiltrados.length === 0) {
+      noResults.classList.remove('hidden');
+    } else {
+      noResults.classList.add('hidden');
+    }
+  }
+
+  function limpiarFiltros() {
+    precioMinInput.value = '';
+    precioMaxInput.value = '';
+    ordenarSelect.value = 'nombre-asc';
+    aplicarFiltros();
+  }
+
+  // Event listeners
+  ordenarSelect?.addEventListener('change', aplicarFiltros);
+  precioMinInput?.addEventListener('input', aplicarFiltros);
+  precioMaxInput?.addEventListener('input', aplicarFiltros);
+  limpiarBtn?.addEventListener('click', limpiarFiltros);
+  resetBtn?.addEventListener('click', limpiarFiltros);
+
+  // Aplicar filtros iniciales
+  aplicarFiltros();
+</script>

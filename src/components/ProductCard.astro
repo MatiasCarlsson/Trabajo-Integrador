@@ -30,7 +30,11 @@ function createURL(path: string) {
           currency: 'ARS',
         }).format(producto.precio);
         return (
-          <li>
+          <li
+            data-producto
+            data-nombre={producto.nombre}
+            data-precio={producto.precio}
+          >
             <a
               class="flex h-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-100 bg-white bg-opacity-20 p-4 shadow-lg backdrop-blur-sm backdrop-filter transition-transform duration-300 hover:scale-105 hover:border-bloom-accent hover:shadow-xl hover:shadow-bloom-accent"
               href={createURL(
@@ -53,7 +57,7 @@ function createURL(path: string) {
                 Producto natural Seytú para el cuidado personal y bienestar.
               </p>
               <p class="mt-2 text-xs font-bold md:text-sm">
-                Precio: {precioFormato}
+                Precio: ${precioFormato}
               </p>
             </a>
           </li>

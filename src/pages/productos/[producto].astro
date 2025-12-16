@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import { getAllProductos } from '@services/productService';
 import Layout from '@layouts/Layout.astro';
+import ProductCard from '@components/ProductCard.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const productosDB = await getAllProductos();
@@ -50,29 +51,58 @@ function createURL(path: string) {
   const cleanPath = path.replace(/^\//, '');
   return base.endsWith('/') ? base + cleanPath : base + '/' + cleanPath;
 }
+
+const productosDB = await getAllProductos();
+
+const productos = productosDB.map((p) => ({
+  id: p.id.toString(),
+  nombre: p.nombre,
+  precio: p.precio,
+  puntos: p.puntos,
+  imagen: p.imagen_url,
+  descripcion: p.descripcion,
+}));
+
+function getRandomProducts(arr: any[], n: number) {
+  return arr
+    .map((p) => ({ p, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ p }) => p)
+    .slice(0, n);
+}
+const productosAleatorios = getRandomProducts(productos, 12);
+
+const buttonStyles =
+  'rounded-lg  px-4 py-2 text-sm text-bloom-bg transition-transform hover:scale-105 hover:bg-purple-700 focus:scale-90 focus:ring-purple-400 md:px-6 md:text-base';
 ---
 
 <Layout title={`Detalles de ${producto.nombre}`}>
   <article
-    class="container mx-auto my-8 grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:gap-8"
+    class="jusce container mx-auto my-8 grid grid-cols-1 gap-2 px-4 md:grid-cols-2 md:gap-4"
   >
-    <div class="order-2 md:order-1">
+    <div
+      class="order-2 mr-8 flex items-center justify-center rounded-lg bg-slate-50 md:order-1"
+    >
       <img
         src={producto.imagen}
         alt={producto.nombre}
-        class="w-full rounded-lg object-contain md:object-cover"
+        class="size-72 object-contain p-4 transition-all duration-150 hover:scale-105 md:object-cover"
       />
     </div>
+
     <div class="order-1 md:order-2">
       <h1 class="mb-4 text-2xl font-bold md:text-3xl">{producto.nombre}</h1>
+
       <p class="mb-4 text-sm text-gray-700 md:text-base">
         {producto.descripcion}
       </p>
+
       <p class="mb-6 text-xl font-bold md:text-2xl">Precio: {precioFormato}</p>
+
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
         <button
           type="button"
-          class="rounded-lg bg-purple-600 px-4 py-2 text-sm text-white hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 md:px-6 md:text-base"
+          class={`${buttonStyles} bg-purple-500`}
           id="add-to-cart"
           data-id={producto.nombre
             .normalize('NFD')
@@ -87,13 +117,17 @@ function createURL(path: string) {
         </button>
         <a
           href={createURL('/productos')}
-          class="text-center text-sm text-purple-600 underline md:text-base"
+          class={`${buttonStyles} bg-opacity-80 bg-bloom-contrast`}
         >
           Volver a la tienda
         </a>
       </div>
     </div>
   </article>
+
+  <section>
+    <ProductCard productos={productosAleatorios} limite={12} />
+  </section>
 </Layout>
 
 <script>
@@ -124,12 +158,8 @@ function createURL(path: string) {
 
       if (existente) {
         existente.cantidad = (existente.cantidad || 1) + 1;
-        console.log(
-          `✅ ${existente.nombre}: ahora tienes ${existente.cantidad} unidades`
-        );
       } else {
         carrito.push({ ...producto, cantidad: 1 });
-        console.log(`🆕 ${producto.nombre}: agregado con 1 unidad`);
       }
 
       localStorage.setItem('carrito', JSON.stringify(carrito));

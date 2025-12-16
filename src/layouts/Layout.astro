@@ -1,4 +1,5 @@
 ---
+import Footer from '@components/Footer.astro';
 import Header from '@components/Header.astro';
 import '@styles/layout.css';
 
@@ -31,5 +32,6 @@ const { title = 'Bloom Distribuciones' } = Astro.props;
   <body id="body">
     <Header />
     <slot />
+    <Footer />
   </body>
 </html>

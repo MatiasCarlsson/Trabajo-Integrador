@@ -1,72 +1,110 @@
 // src/services/productService.ts
-// Servicio para manejar operaciones relacionadas con productos
+// Servicio de lógica de negocio para productos
 
-import { supabase } from '../lib/db';
-import type { Producto } from '../lib/db';
+import type { Producto } from '@database/db';
+import type { FiltrosProducto } from './queries/productoQueries';
+import {
+  queryProductos,
+  queryProductoById,
+  queryProductoByNombre,
+  queryCountProductos,
+  queryProductosStats,
+} from './queries/productoQueries';
+
+// Tipos de transformación
+export interface ProductoFormateado {
+  id: string;
+  nombre: string;
+  puntos: number;
+  precio: number;
+  imagen: string;
+  descripcion: string;
+}
+
+export interface ProductosStats {
+  total: number;
+  precio_minimo: number;
+  precio_maximo: number;
+  precio_promedio: number;
+  puntos_minimo: number;
+  puntos_maximo: number;
+  puntos_promedio: number;
+}
+
+// UTILIDADES DE TRANSFORMACIÓN
 
 /**
- * Obtener todos los productos
+ * Transformar producto de DB a formato de visualización
+ */
+export function formatearProducto(producto: Producto): ProductoFormateado {
+  return {
+    id: producto.id.toString(),
+    nombre: producto.nombre,
+    puntos: producto.puntos,
+    precio: producto.precio,
+    imagen: producto.imagen_url,
+    descripcion: producto.descripcion,
+  };
+}
+
+/**
+ * Transformar lista de productos
+ */
+export function formatearProductos(
+  productos: Producto[]
+): ProductoFormateado[] {
+  return productos.map(formatearProducto);
+}
+
+/**
+ * Decodificar nombre desde URL (ej: "Agua-Blum" -> "Agua Blum")
+ */
+export function decodificarNombreURL(nombreURL: string): string {
+  return decodeURIComponent(nombreURL.replace(/-/g, ' '));
+}
+
+/**
+ * Obtener todos los productos (sin filtros)
  */
 export async function getAllProductos(): Promise<Producto[]> {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .order('nombre', { ascending: true });
+  return queryProductos({ ordenarPor: 'nombre', orden: 'asc' });
+}
 
-  if (error) throw error;
-  return data || [];
+/**
+ * Buscar productos con filtros avanzados
+ */
+export async function buscarProductos(
+  filtros: FiltrosProducto
+): Promise<Producto[]> {
+  return queryProductos(filtros);
 }
 
 /**
  * Obtener un producto por ID
  */
 export async function getProductoById(id: number): Promise<Producto | null> {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    if (error.code === 'PGRST116') return null; // Not found
-    throw error;
-  }
-  return data;
+  return queryProductoById(id);
 }
 
 /**
  * Obtener un producto por nombre (URL-friendly)
  */
 export async function getProductoByNombre(
-  nombre: string
+  nombreURL: string
 ): Promise<Producto | null> {
-  // Decodificar el nombre de la URL y buscar
-  const nombreDecodificado = decodeURIComponent(nombre.replace(/-/g, ' '));
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .ilike('nombre', nombreDecodificado)
-    .single();
-
-  if (error) {
-    if (error.code === 'PGRST116') return null; // Not found
-    throw error;
-  }
-  return data;
+  const nombreDecodificado = decodificarNombreURL(nombreURL);
+  return queryProductoByNombre(nombreDecodificado);
 }
 
 /**
- * Buscar productos por texto
+ * Buscar productos por término de búsqueda simple
  */
 export async function searchProductos(searchTerm: string): Promise<Producto[]> {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .or(`nombre.ilike.%${searchTerm}%,descripcion.ilike.%${searchTerm}%`)
-    .order('nombre', { ascending: true });
-
-  if (error) throw error;
-  return data || [];
+  return queryProductos({
+    busqueda: searchTerm,
+    ordenarPor: 'nombre',
+    orden: 'asc',
+  });
 }
 
 /**
@@ -76,32 +114,25 @@ export async function getProductosByPrecio(
   min: number,
   max: number
 ): Promise<Producto[]> {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .gte('precio', min)
-    .lte('precio', max)
-    .order('precio', { ascending: true });
-
-  if (error) throw error;
-  return data || [];
+  return queryProductos({
+    precioMin: min,
+    precioMax: max,
+    ordenarPor: 'precio',
+    orden: 'asc',
+  });
 }
 
 /**
- * Obtener productos destacados (los más caros o con más puntos)
+ * Obtener productos destacados (ordenados por puntos y precio)
  */
 export async function getProductosDestacados(
   limit: number = 6
 ): Promise<Producto[]> {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .order('puntos', { ascending: false })
-    .order('precio', { ascending: false })
-    .limit(limit);
-
-  if (error) throw error;
-  return data || [];
+  return queryProductos({
+    ordenarPor: 'puntos',
+    orden: 'desc',
+    limit,
+  });
 }
 
 /**
@@ -110,60 +141,26 @@ export async function getProductosDestacados(
 export async function getProductosRecientes(
   limit: number = 10
 ): Promise<Producto[]> {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(limit);
+  return queryProductos({
+    ordenarPor: 'reciente',
+    limit,
+  });
+}
 
-  if (error) throw error;
-  return data || [];
+// FUNCIONES DE ESTADÍSTICAS
+
+/**
+ * Contar total de productos (con filtros opcionales)
+ */
+export async function countProductos(
+  filtros: FiltrosProducto = {}
+): Promise<number> {
+  return queryCountProductos(filtros);
 }
 
 /**
- * Contar total de productos
+ * Obtener estadísticas generales de productos
  */
-export async function countProductos(): Promise<number> {
-  const { count, error } = await supabase
-    .from('productos')
-    .select('*', { count: 'exact', head: true });
-
-  if (error) throw error;
-  return count || 0;
-}
-
-/**
- * Obtener estadísticas de productos
- */
-export async function getProductosStats() {
-  const { data, error } = await supabase
-    .from('productos')
-    .select('precio, puntos');
-
-  if (error) throw error;
-
-  if (!data || data.length === 0) {
-    return {
-      total: 0,
-      precio_minimo: 0,
-      precio_maximo: 0,
-      precio_promedio: 0,
-      puntos_minimo: 0,
-      puntos_maximo: 0,
-      puntos_promedio: 0,
-    };
-  }
-
-  const precios = data.map((p) => p.precio);
-  const puntos = data.map((p) => p.puntos);
-
-  return {
-    total: data.length,
-    precio_minimo: Math.min(...precios),
-    precio_maximo: Math.max(...precios),
-    precio_promedio: precios.reduce((a, b) => a + b, 0) / precios.length,
-    puntos_minimo: Math.min(...puntos),
-    puntos_maximo: Math.max(...puntos),
-    puntos_promedio: puntos.reduce((a, b) => a + b, 0) / puntos.length,
-  };
+export async function getProductosStats(): Promise<ProductosStats> {
+  return queryProductosStats();
 }
